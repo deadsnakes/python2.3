@@ -1,18 +1,18 @@
 libpython@VER@_d.so.1.0 python@VER@-dbg #MINVER#
  Py_InitModule4TraceRefs@Base @VER@
 #include "libpython.symbols"
- _PyDict_Dummy@Base @VER@
+ PyDictIter_Type@Base @VER@
  _PyObject_DebugCheckAddress@Base @VER@
  _PyObject_DebugDumpAddress@Base @VER@
  _PyObject_DebugFree@Base @VER@
  _PyObject_DebugMalloc@Base @VER@
  _PyObject_DebugMallocStats@Base @VER@
  _PyObject_DebugRealloc@Base @VER@
+ _PyThread_Started@Base @VER@
  _Py_AddToAllObjects@Base @VER@
  _Py_Dealloc@Base @VER@
  _Py_ForgetReference@Base @VER@
  _Py_GetObjects@Base @VER@
- _Py_GetRefTotal@Base @VER@
  _Py_NegativeRefcount@Base @VER@
  _Py_NewReference@Base @VER@
  _Py_PrintReferenceAddresses@Base @VER@
