@@ -54,6 +54,7 @@ are:
   re			module
   repr			module
   select		extension
+  sets			module
   sha			extension
   socket		module
   sre			module
@@ -64,7 +65,6 @@ are:
   string		module
   strop			extension
   struct		extension
-  subprocess		module
   sys			builtin
   syslog		extension
   tempfile		module
