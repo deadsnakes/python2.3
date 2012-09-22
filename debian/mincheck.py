@@ -1,5 +1,6 @@
 
 import sys
+from sets import Set as set
 
 def get_listed(fn):
     modules = set()

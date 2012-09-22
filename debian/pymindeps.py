@@ -27,6 +27,7 @@
 import sys, pprint
 import modulefinder
 import imp
+from sets import Set as set
 
 class mymf(modulefinder.ModuleFinder):
     def __init__(self,*args,**kwargs):
