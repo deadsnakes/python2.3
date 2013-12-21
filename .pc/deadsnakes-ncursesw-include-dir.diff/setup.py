@@ -572,6 +572,9 @@ class PyBuildExt(build_ext):
             db_inc_paths.append('/pkg/db-3.%d/include' % x)
             db_inc_paths.append('/opt/db-3.%d/include' % x)
 
+        if cross_compiling:
+            db_inc_paths = []
+
         # Add some common subdirectories for Sleepycat DB to the list,
         # based on the standard include directories. This way DB3/4 gets
         # picked up when it is installed in a non-standard prefix and
@@ -592,13 +595,18 @@ class PyBuildExt(build_ext):
 
         db_ver_inc_map = {}
 
+        if host_platform == 'darwin':
+            sysroot = macosx_sdk_root()
+
         class db_found(Exception): pass
-        was_db_found = False
         try:
             # See whether there is a Sleepycat header in the standard
             # search path.
             for d in inc_dirs + db_inc_paths:
                 f = os.path.join(d, "db.h")
+
+                if host_platform == 'darwin' and is_macosx_sdk_path(d):
+                    f = os.path.join(sysroot, d[1:], "db.h")
 
                 if db_setup_debug: print "db: looking for db.h in", f
                 if os.path.exists(f):
@@ -647,12 +655,19 @@ class PyBuildExt(build_ext):
                     db_incdir.replace("include", 'lib'),
                 ]
 
+                if host_platform != 'darwin':
+                    db_dirs_to_check = filter(os.path.isdir, db_dirs_to_check)
+
                 else:
                     # Same as other branch, but takes OSX SDK into account
                     tmp = []
                     for dn in db_dirs_to_check:
-                        if os.path.isdir(dn):
-                            tmp.append(dn)
+                        if is_macosx_sdk_path(dn):
+                            if os.path.isdir(os.path.join(sysroot, dn[1:])):
+                                tmp.append(dn)
+                        else:
+                            if os.path.isdir(dn):
+                                tmp.append(dn)
                     db_dirs_to_check = tmp
 
                 # Look for a version specific db-X.Y before an ambiguous dbX
@@ -671,7 +686,6 @@ class PyBuildExt(build_ext):
                         if db_setup_debug: print "db lib: ", dblib, "not found"
 
         except db_found:
-            was_db_found = True
             if db_setup_debug:
                 print "bsddb using BerkeleyDB lib:", db_ver, dblib
                 print "bsddb lib dir:", dblib_dir, " inc dir:", db_incdir
@@ -689,7 +703,7 @@ class PyBuildExt(build_ext):
                                   runtime_library_dirs=dblib_dir,
                                   include_dirs=db_incs,
                                   libraries=dblibs))
-        if not was_db_found:
+        else:
             if db_setup_debug: print "db: no appropriate library found"
             db_incs = None
             dblibs = []
@@ -784,19 +798,13 @@ class PyBuildExt(build_ext):
                 exts.append( Extension('nis', ['nismodule.c'],
                                        libraries = libs) )
 
-        # Curses support, requiring the System V version of curses, often
+        # Curses support, requring the System V version of curses, often
         # provided by the ncurses library.
-        panel_library = 'panel'
-        ncursesw_incdirs = ["/usr/include/ncursesw"]
-        if (self.compiler.find_library_file(lib_dirs, 'ncursesw')):
-            curses_libs = ['ncursesw']
-            # Bug 1464056: If _curses.so links with ncursesw,
-            # _curses_panel.so must link with panelw.
-            panel_library = 'panelw'
-            exts.append( Extension('_curses', ['_cursesmodule.c'],
-                                   libraries = curses_libs,
-                                   include_dirs = ncursesw_incdirs) )
-        elif (self.compiler.find_library_file(lib_dirs, 'ncurses')):
+        if platform == 'sunos4':
+            inc_dirs += ['/usr/5include']
+            lib_dirs += ['/usr/5lib']
+
+        if (self.compiler.find_library_file(lib_dirs, 'ncurses')):
             curses_libs = ['ncurses']
             exts.append( Extension('_curses', ['_cursesmodule.c'],
                                    libraries = curses_libs) )
@@ -816,10 +824,9 @@ class PyBuildExt(build_ext):
 
         # If the curses module is enabled, check for the panel module
         if (module_enabled(exts, '_curses') and
-            self.compiler.find_library_file(lib_dirs, panel_library)):
+            self.compiler.find_library_file(lib_dirs, 'panel')):
             exts.append( Extension('_curses_panel', ['_curses_panel.c'],
-                                   libraries = [panel_library] + curses_libs,
-                                   include_dirs = ncursesw_incdirs) )
+                                   libraries = ['panel'] + curses_libs) )
 
         # Build `fpectl` module if Python is configured with --with-fpectl
         data = open('pyconfig.h').read()
