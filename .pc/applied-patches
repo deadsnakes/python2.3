@@ -46,3 +46,5 @@ deadsnakes-add-multiarch-paths.diff
 deadsnakes-libdb-search-from-py2.7.4.diff
 deadsnakes-ncursesw-include-dir.diff
 deadsnakes-fix-debug-ext.diff
+deadsnakes-backport-pkg-config-support.diff
+bdist-wininst-notfound.diff

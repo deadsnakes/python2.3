@@ -238,8 +238,5 @@ class bdist_wininst (Command):
         # wininst.exe is in the same directory as this file
         directory = os.path.dirname(__file__)
         filename = os.path.join(directory, "wininst.exe")
-        try:
-            return open(filename, "rb").read()
-        except IOError, msg:
-            raise DistutilsFileError, str(msg) + ', please install the python%s-dev package' % sys.version[:3]
+        return open(filename, "rb").read()
 # class bdist_wininst
