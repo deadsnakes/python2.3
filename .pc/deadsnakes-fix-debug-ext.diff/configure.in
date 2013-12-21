@@ -424,7 +424,7 @@ AC_SUBST(LIBRARY)
 AC_MSG_CHECKING(LIBRARY)
 if test -z "$LIBRARY"
 then
-	LIBRARY='libpython$(VERSION)$(DEBUG_EXT).a'
+	LIBRARY='libpython$(VERSION).a'
 fi
 AC_MSG_RESULT($LIBRARY)
 
@@ -532,44 +532,44 @@ if test $enable_shared = "yes"; then
   AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
   case $ac_sys_system in
     BeOS*)
-          LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).so'
+          LDLIBRARY='libpython$(VERSION).so'
           ;;
     CYGWIN*)
-          LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).dll.a'
-          DLLLIBRARY='libpython$(VERSION)$(DEBUG_EXT).dll'
+          LDLIBRARY='libpython$(VERSION).dll.a'
+          DLLLIBRARY='libpython$(VERSION).dll'
           ;;
     SunOS*)
-	  LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).so'
-	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(VERSION)$(DEBUG_EXT)'
+	  LDLIBRARY='libpython$(VERSION).so'
+	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(VERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
 	  INSTSONAME="$LDLIBRARY".$SOVERSION
           ;;
     Linux*|GNU*|NetBSD*)
-	  LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).so'
-	  BLDLIBRARY='-L. -lpython$(VERSION)$(DEBUG_EXT)'
+	  LDLIBRARY='libpython$(VERSION).so'
+	  BLDLIBRARY='-L. -lpython$(VERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
 	  INSTSONAME="$LDLIBRARY".$SOVERSION
 	  ;;
     hp*|HP*)
-	  LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).sl'
-	  BLDLIBRARY='-Wl,+b,$(LIBDIR) -L. -lpython$(VERSION)$(DEBUG_EXT)'
+	  LDLIBRARY='libpython$(VERSION).sl'
+	  BLDLIBRARY='-Wl,+b,$(LIBDIR) -L. -lpython$(VERSION)'
 	  RUNSHARED=SHLIB_PATH=`pwd`:${SHLIB_PATH}
 	  ;;
     OSF*)
-	  LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).so'
-         BLDLIBRARY='-rpath $(LIBDIR) -L. -lpython$(VERSION)$(DEBUG_EXT)'
+	  LDLIBRARY='libpython$(VERSION).so'
+         BLDLIBRARY='-rpath $(LIBDIR) -L. -lpython$(VERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
 	  ;;
     atheos*)
-	  LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).so'
-	  BLDLIBRARY='-L. -lpython$(VERSION)$(DEBUG_EXT)'
+	  LDLIBRARY='libpython$(VERSION).so'
+	  BLDLIBRARY='-L. -lpython$(VERSION)'
 	  RUNSHARED=DLL_PATH=`pwd`:${DLL_PATH:-/atheos/sys/libs:/atheos/autolnk/lib}
 	  ;;
   esac
   # DG/UX requires some fancy ld contortions to produce a .so from an .a
   case $MACHDEP in
   dguxR4)
-        LDLIBRARY='libpython$(VERSION)$(DEBUG_EXT).so'
+        LDLIBRARY='libpython$(VERSION).so'
         BASECFLAGS="$BASECFLAGS -pic"
         ;;
   esac
@@ -620,8 +620,6 @@ fi],
 if test "$Py_DEBUG" = 'true'
 then
 	DEBUG_EXT=_d
-else
-	DEBUG_EXT=
 fi
 AC_SUBST(DEBUG_EXT)
 
