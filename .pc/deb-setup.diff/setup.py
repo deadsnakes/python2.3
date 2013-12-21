@@ -241,9 +241,8 @@ class PyBuildExt(build_ext):
 
     def detect_modules(self):
         # Ensure that /usr/local is always used
-        # On Debian /usr/local is always used, so we don't include it twice
-        #add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
-        #add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+        add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
+        add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
 
         # fink installs lots of goodies in /sw/... - make sure we
         # check there
@@ -267,8 +266,6 @@ class PyBuildExt(build_ext):
         # be assumed that no additional -I,-L directives are needed.
         lib_dirs = self.compiler.library_dirs + ['/lib', '/usr/lib']
         inc_dirs = self.compiler.include_dirs + ['/usr/include']
-        gnu_triplet = os.popen('dpkg-architecture -qDEB_HOST_GNU_TYPE').readline()[:-1]; print 'XXX', gnu_triplet
-        inc_dirs.append(os.path.join('/usr/include', gnu_triplet))
         exts = []
 
         platform = self.get_platform()

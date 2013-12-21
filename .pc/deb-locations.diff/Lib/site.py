@@ -18,11 +18,6 @@ On other platforms (mainly Mac and Windows), it uses just sys.prefix
 resulting directories, if they exist, are appended to sys.path, and
 also inspected for path configuration files.
 
-FOR DEBIAN, this sys.path is augmented with directories in /usr/local.
-Local addons go into /usr/local/lib/python<version>/site-packages
-(resp. /usr/local/lib/site-python), Debian addons install into
-/usr/lib/python<version>/site-packages.
-
 A path configuration file is a file whose name has the form
 <package>.pth; its contents are additional directories (one per line)
 to be added to sys.path.  Non-existing directories (or
@@ -165,7 +160,6 @@ prefixes = [sys.prefix]
 sitedir = None # make sure sitedir is initialized because of later 'del'
 if sys.exec_prefix != sys.prefix:
     prefixes.append(sys.exec_prefix)
-prefixes.insert(0, '/usr/local')
 for prefix in prefixes:
     if prefix:
         if sys.platform in ('os2emx', 'riscos'):

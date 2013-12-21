@@ -6,8 +6,7 @@
 # ftpstats [-m maxitems] [-s search] [file]
 # -m maxitems: restrict number of items in "top-N" lists, default 25.
 # -s string:   restrict statistics to lines containing this string.
-# Default file for Debian GNU/Linux is /var/log/xferlog;
-# a "-" means read stdandard input.
+# Default file is /usr/adm/ftpd;  a "-" means read stdandard input.
 
 # The script must be run on the host where the ftp daemon runs.
 # (At CWI this is currently buizerd.)
@@ -35,7 +34,7 @@ def main():
 			maxitems = string.atoi(a)
 		if o == '-s':
 			search = a
-	file = '/var/log/xferlog'
+	file = '/usr/adm/ftpd'
 	if args: file = args[0]
 	if file == '-':
 		f = sys.stdin

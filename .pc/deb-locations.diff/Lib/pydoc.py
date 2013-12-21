@@ -1528,7 +1528,6 @@ class Helper:
         for dir in [os.environ.get('PYTHONDOCS'),
                     homedir and os.path.join(homedir, 'doc'),
                     os.path.join(execdir, 'doc'),
-                    '/usr/share/doc/python' + sys.version[:3] + '-doc/html',
                     '/usr/doc/python-docs-' + split(sys.version)[0],
                     '/usr/doc/python-' + split(sys.version)[0],
                     '/usr/doc/python-docs-' + sys.version[:3],
@@ -1635,9 +1634,6 @@ Here is a list of available topics.  Enter any topic name to get more help.
 Sorry, topic and keyword documentation is not available because the Python
 HTML documentation files could not be found.  If you have installed them,
 please set the environment variable PYTHONDOCS to indicate their location.
-
-On Debian GNU/{Linux,Hurd} systems you have to install the corresponding
-pythonX.Y-doc package.
 ''')
             return
         target = self.topics.get(topic, self.keywords.get(topic))
