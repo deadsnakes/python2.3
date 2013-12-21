@@ -280,6 +280,14 @@ select_select(PyObject *self, PyObject *args)
 		PyErr_SetFromErrno(SelectError);
 	}
 #endif
+	else if (n == 0) {
+                /* optimization */
+		ifdlist = PyList_New(0);
+		if (ifdlist) {
+			ret = Py_BuildValue("OOO", ifdlist, ifdlist, ifdlist);
+			Py_DECREF(ifdlist);
+		}
+	}
 	else {
 		/* any of these three calls can raise an exception.  it's more
 		   convenient to test for this after all three calls... but

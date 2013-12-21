@@ -10,7 +10,7 @@
 -                /* optimization */
 -		ifdlist = PyList_New(0);
 -		if (ifdlist) {
--			ret = PyTuple_Pack(3, ifdlist, ifdlist, ifdlist);
+-			ret = Py_BuildValue("OOO", ifdlist, ifdlist, ifdlist);
 -			Py_DECREF(ifdlist);
 -		}
 -	}
