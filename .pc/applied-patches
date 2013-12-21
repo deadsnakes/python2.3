@@ -11,3 +11,15 @@ issue961805.diff
 signal.set_wakeup_fd.diff
 no-zip-on-sys.path.diff
 linux2-platforms.diff
+distutils-install-layout.diff
+readline6.diff
+makesetup-bashism.diff
+emacs23-build.diff
+tk8.5-compat.diff
+issue8140.diff
+texi-direntries.diff
+issue4961.diff
+issue8154.diff
+issue1923.diff
+issue8233.diff
+issue7332.diff

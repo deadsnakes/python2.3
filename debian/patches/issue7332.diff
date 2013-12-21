@@ -2,7 +2,7 @@
 # DP: PyMarshal_ReadLastObjectFromFile in import_submodule
 --- a/Python/marshal.c
 +++ b/Python/marshal.c
-@@ -761,29 +761,18 @@
+@@ -685,10 +685,7 @@
  PyObject *
  PyMarshal_ReadLastObjectFromFile(FILE *fp)
  {
@@ -14,8 +14,9 @@
  #define REASONABLE_FILE_LIMIT (1L << 18)
  #ifdef HAVE_FSTAT
  	off_t filesize;
--#endif
--#ifdef HAVE_FSTAT
+@@ -699,19 +696,13 @@
+ 	}
+ #ifdef HAVE_FSTAT
  	filesize = getfilesize(fp);
 -	if (filesize > 0) {
 -		char buf[SMALL_FILE_LIMIT];
@@ -36,7 +37,7 @@
  			return v;
  		}
  
-@@ -794,7 +783,6 @@
+@@ -722,7 +713,6 @@
  	 */
  	return PyMarshal_ReadObjectFromFile(fp);
  

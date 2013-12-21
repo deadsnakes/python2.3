@@ -73,13 +73,11 @@ def _show(title=None, message=None, icon=None, type=None, **options):
     if title:   options["title"] = title
     if message: options["message"] = message
     res = Message(**options).show()
-    # In some Tcl installations, yes/no is converted into a boolean.
+    # In some Tcl installations, Tcl converts yes/no into a boolean
     if isinstance(res, bool):
-        if res:
-            return YES
+        if res: return YES
         return NO
-    # In others we get a Tcl_Obj.
-    return str(res)
+    return res
 
 def showinfo(title=None, message=None, **options):
     "Show an info message"
