@@ -2,7 +2,7 @@
 
 --- a/configure.in
 +++ b/configure.in
-@@ -752,6 +752,10 @@
+@@ -643,6 +643,10 @@
  then
      case $GCC in
      yes)
@@ -13,7 +13,7 @@
  	case $ac_cv_prog_cc_g in
  	yes)
  	    if test "$Py_DEBUG" = 'true' ; then
-@@ -759,11 +763,11 @@
+@@ -650,11 +654,11 @@
  		# debug builds.
  		OPT="-g -Wall -Wstrict-prototypes"
  	    else

@@ -1,7 +1,7 @@
 # DP: Fix issues with readline6
 --- a/configure.in
 +++ b/configure.in
-@@ -3006,6 +3006,10 @@
+@@ -2866,6 +2866,10 @@
    [readline/readline.h],
    AC_DEFINE(HAVE_RL_COMPLETION_APPEND_CHARACTER, 1,
    [Define if you have readline 2.2]), )
@@ -14,7 +14,7 @@
  # check for readline 4.0
 --- a/Modules/readline.c
 +++ b/Modules/readline.c
-@@ -676,6 +676,12 @@
+@@ -576,6 +576,12 @@
  static char **
  flex_complete(char *text, int start, int end)
  {
@@ -27,7 +27,7 @@
  	Py_XDECREF(begidx);
  	Py_XDECREF(endidx);
  	begidx = PyInt_FromLong((long) start);
-@@ -718,9 +724,6 @@
+@@ -618,9 +624,6 @@
  	rl_completer_word_break_characters =
  		strdup(" \t\n`~!@#$%^&*()-=+[{]}\\|;:'\",<>/?");
  		/* All nonalphanums except '.' */
@@ -39,7 +39,7 @@
  	endidx = PyInt_FromLong(0L);
 --- a/pyconfig.h.in
 +++ b/pyconfig.h.in
-@@ -377,6 +377,9 @@
+@@ -369,6 +369,9 @@
  /* Define if you have readline 4.2 */
  #undef HAVE_RL_COMPLETION_MATCHES
  

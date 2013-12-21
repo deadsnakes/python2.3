@@ -1,6 +1,6 @@
 --- a/Lib/distutils/unixccompiler.py
 +++ b/Lib/distutils/unixccompiler.py
-@@ -194,7 +194,12 @@
+@@ -148,7 +148,12 @@
          objects, output_dir = self._fix_object_args(objects, output_dir)
          libraries, library_dirs, runtime_library_dirs = \
              self._fix_lib_args(libraries, library_dirs, runtime_library_dirs)

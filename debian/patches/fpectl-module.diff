@@ -1,8 +1,8 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -762,6 +762,11 @@
+@@ -688,6 +688,11 @@
              exts.append( Extension('_curses_panel', ['_curses_panel.c'],
-                                    libraries = [panel_library] + curses_libs) )
+                                    libraries = ['panel'] + curses_libs) )
  
 +        # Build `fpectl` module if Python is configured with --with-fpectl
 +        data = open('pyconfig.h').read()

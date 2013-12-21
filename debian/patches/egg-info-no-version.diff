@@ -93,7 +93,7 @@
  # class install
 --- a/Lib/distutils/dist.py
 +++ b/Lib/distutils/dist.py
-@@ -1015,7 +1015,10 @@
+@@ -976,7 +976,10 @@
                           "license", "description", "long_description",
                           "keywords", "platforms", "fullname", "contact",
                           "contact_email", "license", "classifiers",
@@ -105,7 +105,7 @@
  
      def __init__ (self):
          self.name = None
-@@ -1032,6 +1035,10 @@
+@@ -993,6 +996,10 @@
          self.platforms = None
          self.classifiers = None
          self.download_url = None
@@ -116,7 +116,7 @@
  
      def write_pkg_info (self, base_dir):
          """Write the PKG-INFO file into the release tree.
-@@ -1067,6 +1074,43 @@
+@@ -1028,6 +1035,43 @@
  
      # write_pkg_info ()
  
@@ -160,7 +160,7 @@
      # -- Metadata query methods ----------------------------------------
  
      def get_name (self):
-@@ -1125,6 +1169,36 @@
+@@ -1086,6 +1130,36 @@
      def get_download_url(self):
          return self.download_url or "UNKNOWN"
  

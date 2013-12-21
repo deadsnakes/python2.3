@@ -2,7 +2,7 @@
 
 --- a/Lib/urllib.py
 +++ b/Lib/urllib.py
-@@ -769,13 +769,6 @@
+@@ -738,13 +738,6 @@
              self.ftp.voidcmd(cmd)
          conn = None
          if file and not isdir:

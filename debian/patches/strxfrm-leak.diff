@@ -2,7 +2,7 @@
 
 --- a/Modules/_localemodule.c
 +++ b/Modules/_localemodule.c
-@@ -357,7 +357,7 @@
+@@ -399,7 +399,7 @@
      buf = PyMem_Malloc(n1);
      if (!buf)
          return PyErr_NoMemory();

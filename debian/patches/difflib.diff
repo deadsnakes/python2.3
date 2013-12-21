@@ -3,7 +3,7 @@
 
 --- a/Lib/difflib.py
 +++ b/Lib/difflib.py
-@@ -473,26 +473,31 @@
+@@ -468,26 +468,31 @@
  
          if self.matching_blocks is not None:
              return self.matching_blocks

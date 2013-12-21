@@ -2,7 +2,7 @@
 
 --- a/Lib/distutils/command/build_ext.py
 +++ b/Lib/distutils/command/build_ext.py
-@@ -186,7 +186,7 @@
+@@ -181,7 +181,7 @@
          # for extensions under Cygwin and AtheOS Python's library directory must be
          # appended to library_dirs
          if sys.platform[:6] == 'cygwin' or sys.platform[:6] == 'atheos':

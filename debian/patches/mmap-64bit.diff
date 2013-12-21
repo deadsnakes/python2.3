@@ -2,7 +2,7 @@
 
 --- a/Lib/test/test_mmap.py
 +++ b/Lib/test/test_mmap.py
-@@ -328,6 +328,22 @@
+@@ -312,6 +312,22 @@
          os.unlink(TESTFN)
  
  
@@ -27,7 +27,7 @@
  test_both()
 --- a/Modules/mmapmodule.c
 +++ b/Modules/mmapmodule.c
-@@ -374,7 +374,7 @@
+@@ -375,7 +375,7 @@
  {
  	unsigned long new_size;
  	CHECK_VALID(NULL);
@@ -36,7 +36,7 @@
  	    !is_resizeable(self)) {
  		return NULL;
  #ifdef MS_WINDOWS
-@@ -463,10 +463,10 @@
+@@ -459,10 +459,10 @@
  static PyObject *
  mmap_flush_method(mmap_object *self, PyObject *args)
  {
@@ -50,7 +50,7 @@
  		return NULL;
  	} else if ((offset + size) > self->size) {
  		PyErr_SetString (PyExc_ValueError,
-@@ -539,7 +539,7 @@
+@@ -535,7 +535,7 @@
  {
  	unsigned long dest, src, count;
  	CHECK_VALID(NULL);
@@ -59,7 +59,7 @@
  	    !is_writeable(self)) {
  		return NULL;
  	} else {
-@@ -863,7 +863,7 @@
+@@ -859,7 +859,7 @@
  	PyObject *map_size_obj = NULL;
  	int map_size;
  	int fd, flags = MAP_SHARED, prot = PROT_WRITE | PROT_READ;
@@ -68,7 +68,7 @@
  	char *keywords[] = {"fileno", "length", 
  			    "flags", "prot", 
  			    "access", NULL};
-@@ -875,11 +875,11 @@
+@@ -871,11 +871,11 @@
  	if (map_size < 0)
  		return NULL;
  
@@ -82,7 +82,7 @@
  	case ACCESS_READ:
  		flags = MAP_SHARED;
  		prot = PROT_READ;
-@@ -937,7 +937,7 @@
+@@ -922,7 +922,7 @@
  		PyErr_SetFromErrno(mmap_module_error);
  		return NULL;
  	}
@@ -91,7 +91,7 @@
  	return (PyObject *)m_obj;
  }
  #endif /* UNIX */
-@@ -953,7 +953,7 @@
+@@ -938,7 +938,7 @@
  	DWORD dwErr = 0;
  	int fileno;
  	HANDLE fh = 0;
@@ -100,7 +100,7 @@
  	DWORD flProtect, dwDesiredAccess;
  	char *keywords[] = { "fileno", "length", 
  			     "tagname", 
-@@ -965,7 +965,7 @@
+@@ -950,7 +950,7 @@
  		return NULL;
  	}
  
@@ -109,7 +109,7 @@
  	case ACCESS_READ:
  		flProtect = PAGE_READONLY;
  		dwDesiredAccess = FILE_MAP_READ;
-@@ -1050,7 +1050,7 @@
+@@ -1035,7 +1035,7 @@
  	else
  		m_obj->tagname = NULL;
  

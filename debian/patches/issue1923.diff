@@ -2,7 +2,7 @@
 # DP: generated in Distutils.
 --- a/Lib/distutils/util.py
 +++ b/Lib/distutils/util.py
-@@ -509,6 +509,5 @@
+@@ -455,6 +455,5 @@
      RFC-822 header, by ensuring there are 8 spaces space after each newline.
      """
      lines = string.split(header, '\n')

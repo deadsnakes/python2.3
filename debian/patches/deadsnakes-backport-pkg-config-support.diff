@@ -4,7 +4,7 @@
 
 --- a/Makefile.pre.in
 +++ b/Makefile.pre.in
-@@ -629,6 +629,8 @@
+@@ -590,6 +590,8 @@
  	else true; \
  	fi
  	(cd $(DESTDIR)$(BINDIR); $(LN) python$(VERSION)$(EXE) $(PYTHON))
@@ -13,7 +13,7 @@
  
  # Install the interpreter with $(VERSION) affixed
  # This goes into $(exec_prefix)
-@@ -798,8 +800,12 @@
+@@ -757,8 +759,12 @@
  # Install the library and miscellaneous stuff needed for extending/embedding
  # This goes into $(exec_prefix)$(DEBUG_EXT)
  LIBPL=		$(LIBP)/config$(DEBUG_EXT)
@@ -27,7 +27,7 @@
  	do \
  		if test ! -d $(DESTDIR)$$i; then \
  			echo "Creating directory $$i"; \
-@@ -826,6 +832,7 @@
+@@ -785,6 +791,7 @@
  	$(INSTALL_DATA) Modules/Setup $(DESTDIR)$(LIBPL)/Setup
  	$(INSTALL_DATA) Modules/Setup.local $(DESTDIR)$(LIBPL)/Setup.local
  	$(INSTALL_DATA) Modules/Setup.config $(DESTDIR)$(LIBPL)/Setup.config
@@ -37,7 +37,7 @@
  	@if [ -s Modules/python.exp -a \
 --- a/Misc/ACKS
 +++ b/Misc/ACKS
-@@ -503,6 +503,7 @@
+@@ -466,6 +466,7 @@
  Case Roole
  Timothy Roscoe
  Craig Rowland
@@ -62,7 +62,7 @@
 +Cflags: -I${includedir}/python@VERSION@
 --- a/configure.in
 +++ b/configure.in
-@@ -3284,7 +3284,7 @@
+@@ -3104,7 +3104,7 @@
  AC_MSG_RESULT(done)
  
  # generate output files

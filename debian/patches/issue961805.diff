@@ -1,7 +1,7 @@
 # DP: Fix issue 961805, Text.edit_modified() fails.
 --- a/Lib/lib-tk/Tkinter.py
 +++ b/Lib/lib-tk/Tkinter.py
-@@ -2846,8 +2846,7 @@
+@@ -2819,8 +2819,7 @@
          and edit_undo
  
          """

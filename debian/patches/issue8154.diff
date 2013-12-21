@@ -1,7 +1,7 @@
 # DP: Issue #8154, fix segfault with os.execlp('true')
 --- a/Modules/posixmodule.c
 +++ b/Modules/posixmodule.c
-@@ -2217,6 +2217,11 @@
+@@ -2159,6 +2159,11 @@
                  PyMem_Free(path);
  		return NULL;
  	}

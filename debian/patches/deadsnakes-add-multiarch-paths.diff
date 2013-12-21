@@ -8,7 +8,7 @@
  
  # This global variable is used to hold the list of modules to be disabled.
  disabled_module_list = []
-@@ -238,11 +239,38 @@
+@@ -239,11 +240,38 @@
                  return platform
          return sys.platform
  
@@ -45,5 +45,5 @@
          #add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
 +        self.add_multiarch_paths()
  
-         # Add paths to popular package managers on OS X/darwin
-         if sys.platform == "darwin":
+         # fink installs lots of goodies in /sw/... - make sure we
+         # check there

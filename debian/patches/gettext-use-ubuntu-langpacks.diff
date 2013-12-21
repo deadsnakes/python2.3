@@ -4,7 +4,7 @@ Description: Support Ubuntu langpacks
 Forwarded: not-needed
 --- a/Lib/gettext.py
 +++ b/Lib/gettext.py
-@@ -433,11 +433,26 @@
+@@ -384,11 +384,26 @@
          if lang == 'C':
              break
          mofile = os.path.join(localedir, lang, 'LC_MESSAGES', '%s.mo' % domain)

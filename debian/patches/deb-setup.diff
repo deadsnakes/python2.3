@@ -1,6 +1,6 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -240,8 +240,9 @@
+@@ -241,8 +241,9 @@
  
      def detect_modules(self):
          # Ensure that /usr/local is always used
@@ -10,11 +10,11 @@
 +        #add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
 +        #add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
  
-         # Add paths to popular package managers on OS X/darwin
-         if sys.platform == "darwin":
-@@ -271,6 +272,8 @@
-             '/lib', '/usr/lib',
-             ]
+         # fink installs lots of goodies in /sw/... - make sure we
+         # check there
+@@ -266,6 +267,8 @@
+         # be assumed that no additional -I,-L directives are needed.
+         lib_dirs = self.compiler.library_dirs + ['/lib', '/usr/lib']
          inc_dirs = self.compiler.include_dirs + ['/usr/include']
 +        gnu_triplet = os.popen('dpkg-architecture -qDEB_HOST_GNU_TYPE').readline()[:-1]; print 'XXX', gnu_triplet
 +        inc_dirs.append(os.path.join('/usr/include', gnu_triplet))

@@ -2,7 +2,7 @@
 
 --- a/Lib/platform.py
 +++ b/Lib/platform.py
-@@ -236,6 +236,25 @@
+@@ -235,6 +235,25 @@
      except os.error:
          # Probably not a Unix system
          return distname,version,id
