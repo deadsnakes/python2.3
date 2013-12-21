@@ -75,7 +75,7 @@ class DBRecIO:
 
         dlen = newpos - self.pos
 
-        r = self.db.get(self.key, txn=self.txn, dlen=dlen, doff=self.pos)
+        r = self.db.get(key, txn=self.txn, dlen=dlen, doff=self.pos)
         self.pos = newpos
         return r
 
@@ -121,7 +121,7 @@ class DBRecIO:
                                       "Negative size not allowed")
         elif size < self.pos:
             self.pos = size
-        self.db.put(self.key, "", txn=self.txn, dlen=self.len-size, doff=size)
+        self.db.put(key, "", txn=self.txn, dlen=self.len-size, doff=size)
 
     def write(self, s):
         if self.closed:
@@ -131,7 +131,7 @@ class DBRecIO:
             self.buflist.append('\0'*(self.pos - self.len))
             self.len = self.pos
         newpos = self.pos + len(s)
-        self.db.put(self.key, s, txn=self.txn, dlen=len(s), doff=self.pos)
+        self.db.put(key, s, txn=self.txn, dlen=len(s), doff=self.pos)
         self.pos = newpos
 
     def writelines(self, list):
@@ -164,10 +164,10 @@ def _test():
     f.seek(len(lines[0]))
     f.write(lines[1])
     f.seek(0)
-    print 'First line =', repr(f.readline())
+    print 'First line =', `f.readline()`
     here = f.tell()
     line = f.readline()
-    print 'Second line =', repr(line)
+    print 'Second line =', `line`
     f.seek(-len(line), 1)
     line2 = f.read(len(line))
     if line != line2:

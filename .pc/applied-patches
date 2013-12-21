@@ -48,3 +48,5 @@ deadsnakes-ncursesw-include-dir.diff
 deadsnakes-fix-debug-ext.diff
 deadsnakes-backport-pkg-config-support.diff
 bdist-wininst-notfound.diff
+deadsnakes-no-rpath.diff
+deadsnakes-bsddb-module-py2.7.x.diff
