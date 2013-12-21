@@ -9,3 +9,5 @@ debug-build.diff
 webbrowser.diff
 issue961805.diff
 signal.set_wakeup_fd.diff
+no-zip-on-sys.path.diff
+linux2-platforms.diff

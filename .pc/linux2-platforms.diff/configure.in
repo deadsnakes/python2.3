@@ -118,17 +118,6 @@ then
 	MACHDEP="$ac_md_system$ac_md_release"
 
 	case $MACHDEP in
-	linux2*)
-	    ac_sys_machine=`uname -m`
-	    ac_md_machine=`echo $ac_sys_machine |
-				tr -d '[/ ]' | tr '[[A-Z]]' '[[a-z]]'`
-	    case $ac_md_machine in
-	    alpha*) MACHDEP="$MACHDEP-alpha" ;;
-	    parisc*) MACHDEP="$MACHDEP-hppa" ;;
-	    mips*) MACHDEP="$MACHDEP-mips" ;;
-	    sparc*) MACHDEP="$MACHDEP-sparc" ;;
-	    esac
-	    ;;
 	cygwin*) MACHDEP="cygwin";;
 	darwin*) MACHDEP="darwin";;
 	atheos*) MACHDEP="atheos";;

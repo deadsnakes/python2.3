@@ -207,8 +207,7 @@ class _posixfile_:
             elif sys.platform in ['aix3', 'aix4']:
                 l_type, l_whence, l_start, l_len, l_sysid, l_pid, l_vfs = \
                     struct.unpack('hhlllii', flock)
-            elif sys.platform in ('linux2', 'linux2-alpha', 'linux2-hppa',
-                                  'linux2-mips', 'linux2-sparc'):
+            elif sys.platform == "linux2":
                 l_type, l_whence, l_start, l_len, l_pid, l_sysid = \
                     struct.unpack('hhllhh', flock)
             else:

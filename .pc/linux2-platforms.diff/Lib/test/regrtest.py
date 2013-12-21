@@ -935,10 +935,6 @@ _expectations = {
        test_winsound
         """,
 }
-_expectations['linux2-alpha'] = _expectations['linux2']
-_expectations['linux2-hppa'] = _expectations['linux2']
-_expectations['linux2-mips'] = _expectations['linux2']
-_expectations['linux2-sparc'] = _expectations['linux2']
 _expectations['freebsd5'] = _expectations['freebsd4']
 
 class _ExpectedSkips:

@@ -4406,8 +4406,8 @@
              else:
 --- a/Lib/test/regrtest.py
 +++ b/Lib/test/regrtest.py
-@@ -1114,6 +1114,10 @@
-         test_zlib
+@@ -935,6 +935,10 @@
+        test_winsound
          """,
  }
 +_expectations['linux2-alpha'] = _expectations['linux2']
@@ -4415,26 +4415,11 @@
 +_expectations['linux2-mips'] = _expectations['linux2']
 +_expectations['linux2-sparc'] = _expectations['linux2']
  _expectations['freebsd5'] = _expectations['freebsd4']
- _expectations['freebsd6'] = _expectations['freebsd4']
  
---- a/Lib/test/test_socket.py
-+++ b/Lib/test/test_socket.py
-@@ -313,8 +313,10 @@
-         # Find one service that exists, then check all the related interfaces.
-         # I've ordered this by protocols that have both a tcp and udp
-         # protocol, at least for modern Linuxes.
--        if sys.platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',
--                            'darwin'):
-+        if sys.platform in ('linux2', 'linux2-alpha', 'linux2-hppa',
-+                            'linux2-mips', 'linux2-sparc',
-+                            'freebsd4', 'freebsd5', 'freebsd6',
-+                            'freebsd7', 'darwin'):
-             # avoid the 'echo' service on this platform, as there is an
-             # assumption breaking non-standard port/protocol entry
-             services = ('daytime', 'qotd', 'domain')
+ class _ExpectedSkips:
 --- a/configure.in
 +++ b/configure.in
-@@ -175,6 +175,17 @@
+@@ -118,6 +118,17 @@
  	MACHDEP="$ac_md_system$ac_md_release"
  
  	case $MACHDEP in
