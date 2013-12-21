@@ -646,14 +646,11 @@ class PyBuildExt(build_ext):
                     db_incdir.replace("include", 'lib64'),
                     db_incdir.replace("include", 'lib'),
                 ]
-
-                else:
-                    # Same as other branch, but takes OSX SDK into account
-                    tmp = []
-                    for dn in db_dirs_to_check:
-                        if os.path.isdir(dn):
-                            tmp.append(dn)
-                    db_dirs_to_check = tmp
+                tmp = []
+                for dn in db_dirs_to_check:
+                    if os.path.isdir(dn):
+                        tmp.append(dn)
+                db_dirs_to_check = tmp
 
                 # Look for a version specific db-X.Y before an ambiguous dbX
                 # XXX should we -ever- look for a dbX name?  Do any

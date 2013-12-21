@@ -1,6 +1,6 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -496,103 +496,201 @@
+@@ -496,103 +496,198 @@
          # implementation independent wrapper for these; dumbdbm.py provides
          # similar functionality (but slower of course) implemented in Python.
  
@@ -150,10 +150,10 @@
 +
 +        db_inc_paths = std_variants + db_inc_paths
 +        db_inc_paths = [p for p in db_inc_paths if os.path.exists(p)]
-+
-+        db_ver_inc_map = {}
  
 -        class found(Exception): pass
++        db_ver_inc_map = {}
++
 +        class db_found(Exception): pass
 +        was_db_found = False
          try:
@@ -227,14 +227,11 @@
 +                    db_incdir.replace("include", 'lib64'),
 +                    db_incdir.replace("include", 'lib'),
 +                ]
-+
-+                else:
-+                    # Same as other branch, but takes OSX SDK into account
-+                    tmp = []
-+                    for dn in db_dirs_to_check:
-+                        if os.path.isdir(dn):
-+                            tmp.append(dn)
-+                    db_dirs_to_check = tmp
++                tmp = []
++                for dn in db_dirs_to_check:
++                    if os.path.isdir(dn):
++                        tmp.append(dn)
++                db_dirs_to_check = tmp
 +
 +                # Look for a version specific db-X.Y before an ambiguous dbX
 +                # XXX should we -ever- look for a dbX name?  Do any
