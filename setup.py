@@ -13,6 +13,7 @@ from distutils.core import Extension, setup
 from distutils.command.build_ext import build_ext
 from distutils.command.install import install
 from distutils.command.install_lib import install_lib
+from distutils.spawn import find_executable
 
 # This global variable is used to hold the list of modules to be disabled.
 disabled_module_list = []
@@ -239,11 +240,38 @@ class PyBuildExt(build_ext):
                 return platform
         return sys.platform
 
+    def add_multiarch_paths(self):
+        # Debian/Ubuntu multiarch support.
+        # https://wiki.ubuntu.com/MultiarchSpec
+        if not find_executable('dpkg-architecture'):
+            return
+        tmpfile = os.path.join(self.build_temp, 'multiarch')
+        if not os.path.exists(self.build_temp):
+            os.makedirs(self.build_temp)
+        ret = os.system(
+            'dpkg-architecture -qDEB_HOST_MULTIARCH > %s 2> /dev/null' %
+            tmpfile)
+        try:
+            if ret >> 8 == 0:
+                fp = open(tmpfile)
+                try:
+                    multiarch_path_component = fp.readline().strip()
+                finally:
+                    fp.close()
+
+                add_dir_to_list(self.compiler.library_dirs,
+                                '/usr/lib/' + multiarch_path_component)
+                add_dir_to_list(self.compiler.include_dirs,
+                                '/usr/include/' + multiarch_path_component)
+        finally:
+            os.unlink(tmpfile)
+
     def detect_modules(self):
         # Ensure that /usr/local is always used
         # On Debian /usr/local is always used, so we don't include it twice
         #add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
         #add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+        self.add_multiarch_paths()
 
         # fink installs lots of goodies in /sw/... - make sure we
         # check there
@@ -468,103 +496,201 @@ class PyBuildExt(build_ext):
         # implementation independent wrapper for these; dumbdbm.py provides
         # similar functionality (but slower of course) implemented in Python.
 
-        # Sleepycat Berkeley DB interface.  http://www.sleepycat.com
+        # Sleepycat^WOracle Berkeley DB interface.
+        #  http://www.oracle.com/database/berkeley-db/db/index.html
         #
-        # This requires the Sleepycat DB code. The earliest supported version
-        # of that library is 3.1, the latest supported version is 4.2.  A list
-        # of available releases can be found at
-        #
-        # http://www.sleepycat.com/update/index.html
-        #
-        # NOTE: 3.1 is only partially supported; expect the extended bsddb module
-        # test suite to show failures due to some missing methods and behaviours
-        # in BerkeleyDB 3.1.
+        # This requires the Sleepycat^WOracle DB code. The supported versions
+        # are set below.  Visit the URL above to download
+        # a release.  Most open source OSes come with one or more
+        # versions of BerkeleyDB already installed.
 
-        # when sorted in reverse order, keys for this dict must appear in the
-        # order you wish to search - e.g., search for db4 before db3
-        db_try_this = {
-            'db4': {'libs': ('db-4.2', 'db42', 'db-4.1', 'db41', 'db-4.0', 'db4',),
-                    'libdirs': ('/usr/local/BerkeleyDB.4.2/lib',
-                                '/usr/local/BerkeleyDB.4.1/lib',
-                                '/usr/local/BerkeleyDB.4.0/lib',
-                                '/usr/local/lib',
-                                '/opt/sfw',
-                                '/sw/lib',
-                                ),
-                    'incdirs': ('/usr/local/BerkeleyDB.4.2/include',
-                                '/usr/local/include/db42',
-                                '/usr/local/BerkeleyDB.4.1/include',
-                                '/usr/local/include/db41',
-                                '/usr/local/BerkeleyDB.4.0/include',
-                                '/usr/local/include/db4',
-                                '/opt/sfw/include/db4',
-                                '/sw/include/db4',
-                                '/usr/include/db4',
-                                )},
-            'db3': {'libs': ('db-3.3', 'db-3.2', 'db-3.1', 'db3',),
-                    'libdirs': ('/usr/local/BerkeleyDB.3.3/lib',
-                                '/usr/local/BerkeleyDB.3.2/lib',
-                                '/usr/local/BerkeleyDB.3.1/lib',
-                                '/usr/local/lib',
-                                '/opt/sfw/lib',
-                                '/sw/lib',
-                                ),
-                    'incdirs': ('/usr/local/BerkeleyDB.3.3/include',
-                                '/usr/local/BerkeleyDB.3.2/include',
-                                '/usr/local/BerkeleyDB.3.1/include',
-                                '/usr/local/include/db3',
-                                '/opt/sfw/include/db3',
-                                '/sw/include/db3',
-                                '/usr/include/db3',
-                                )},
-            }
+        max_db_ver = (5, 3)
+        min_db_ver = (4, 3)
+        db_setup_debug = False   # verbose debug prints from this script?
 
-        db_search_order = db_try_this.keys()
-        db_search_order.sort()
-        db_search_order.reverse()
+        def allow_db_ver(db_ver):
+            """Returns a boolean if the given BerkeleyDB version is acceptable.
 
-        class found(Exception): pass
+            Args:
+              db_ver: A tuple of the version to verify.
+            """
+            if not (min_db_ver <= db_ver <= max_db_ver):
+                return False
+            # Use this function to filter out known bad configurations.
+            if (4, 6) == db_ver[:2]:
+                # BerkeleyDB 4.6.x is not stable on many architectures.
+                arch = platform_machine()
+                if arch not in ('i386', 'i486', 'i586', 'i686',
+                                'x86_64', 'ia64'):
+                    return False
+            return True
+
+        def gen_db_minor_ver_nums(major):
+            if major == 5:
+                for x in range(max_db_ver[1]+1):
+                    if allow_db_ver((5, x)):
+                        yield x
+            elif major == 4:
+                for x in range(max_db_ver[1]+1):
+                    if allow_db_ver((4, x)):
+                        yield x
+            elif major == 3:
+                for x in (3,):
+                    if allow_db_ver((3, x)):
+                        yield x
+            else:
+                raise ValueError("unknown major BerkeleyDB version", major)
+
+        # construct a list of paths to look for the header file in on
+        # top of the normal inc_dirs.
+        db_inc_paths = [
+            '/usr/include/db4',
+            '/usr/local/include/db4',
+            '/opt/sfw/include/db4',
+            '/usr/include/db3',
+            '/usr/local/include/db3',
+            '/opt/sfw/include/db3',
+            # Fink defaults (http://fink.sourceforge.net/)
+            '/sw/include/db4',
+            '/sw/include/db3',
+        ]
+        # 4.x minor number specific paths
+        for x in gen_db_minor_ver_nums(4):
+            db_inc_paths.append('/usr/include/db4%d' % x)
+            db_inc_paths.append('/usr/include/db4.%d' % x)
+            db_inc_paths.append('/usr/local/BerkeleyDB.4.%d/include' % x)
+            db_inc_paths.append('/usr/local/include/db4%d' % x)
+            db_inc_paths.append('/pkg/db-4.%d/include' % x)
+            db_inc_paths.append('/opt/db-4.%d/include' % x)
+            # MacPorts default (http://www.macports.org/)
+            db_inc_paths.append('/opt/local/include/db4%d' % x)
+        # 3.x minor number specific paths
+        for x in gen_db_minor_ver_nums(3):
+            db_inc_paths.append('/usr/include/db3%d' % x)
+            db_inc_paths.append('/usr/local/BerkeleyDB.3.%d/include' % x)
+            db_inc_paths.append('/usr/local/include/db3%d' % x)
+            db_inc_paths.append('/pkg/db-3.%d/include' % x)
+            db_inc_paths.append('/opt/db-3.%d/include' % x)
+
+        # Add some common subdirectories for Sleepycat DB to the list,
+        # based on the standard include directories. This way DB3/4 gets
+        # picked up when it is installed in a non-standard prefix and
+        # the user has added that prefix into inc_dirs.
+        std_variants = []
+        for dn in inc_dirs:
+            std_variants.append(os.path.join(dn, 'db3'))
+            std_variants.append(os.path.join(dn, 'db4'))
+            for x in gen_db_minor_ver_nums(4):
+                std_variants.append(os.path.join(dn, "db4%d"%x))
+                std_variants.append(os.path.join(dn, "db4.%d"%x))
+            for x in gen_db_minor_ver_nums(3):
+                std_variants.append(os.path.join(dn, "db3%d"%x))
+                std_variants.append(os.path.join(dn, "db3.%d"%x))
+
+        db_inc_paths = std_variants + db_inc_paths
+        db_inc_paths = [p for p in db_inc_paths if os.path.exists(p)]
+
+        db_ver_inc_map = {}
+
+        class db_found(Exception): pass
+        was_db_found = False
         try:
             # See whether there is a Sleepycat header in the standard
             # search path.
-            std_dbinc = None
-            for d in inc_dirs:
+            for d in inc_dirs + db_inc_paths:
                 f = os.path.join(d, "db.h")
+
+                if db_setup_debug: print "db: looking for db.h in", f
                 if os.path.exists(f):
                     f = open(f).read()
-                    m = re.search(r"#define\WDB_VERSION_MAJOR\W([1-9]+)", f)
+                    m = re.search(r"#define\WDB_VERSION_MAJOR\W(\d+)", f)
                     if m:
-                        std_dbinc = 'db' + m.group(1)
-            for dbkey in db_search_order:
-                dbd = db_try_this[dbkey]
-                for dblib in dbd['libs']:
-                    # Prefer version-specific includes over standard
-                    # include locations.
-                    db_incs = find_file('db.h', [], dbd['incdirs'])
-                    dblib_dir = find_library_file(self.compiler,
-                                                  dblib,
-                                                  lib_dirs,
-                                                  list(dbd['libdirs']))
-                    if (db_incs or dbkey == std_dbinc) and \
-                           dblib_dir is not None:
-                        dblibs = [dblib]
-                        raise found
-        except found:
+                        db_major = int(m.group(1))
+                        m = re.search(r"#define\WDB_VERSION_MINOR\W(\d+)", f)
+                        db_minor = int(m.group(1))
+                        db_ver = (db_major, db_minor)
+
+                        # Avoid 4.6 prior to 4.6.21 due to a BerkeleyDB bug
+                        if db_ver == (4, 6):
+                            m = re.search(r"#define\WDB_VERSION_PATCH\W(\d+)", f)
+                            db_patch = int(m.group(1))
+                            if db_patch < 21:
+                                print "db.h:", db_ver, "patch", db_patch,
+                                print "being ignored (4.6.x must be >= 4.6.21)"
+                                continue
+
+                        if ( (db_ver not in db_ver_inc_map) and
+                            allow_db_ver(db_ver) ):
+                            # save the include directory with the db.h version
+                            # (first occurrence only)
+                            db_ver_inc_map[db_ver] = d
+                            if db_setup_debug:
+                                print "db.h: found", db_ver, "in", d
+                        else:
+                            # we already found a header for this library version
+                            if db_setup_debug: print "db.h: ignoring", d
+                    else:
+                        # ignore this header, it didn't contain a version number
+                        if db_setup_debug:
+                            print "db.h: no version number version in", d
+
+            db_found_vers = db_ver_inc_map.keys()
+            db_found_vers.sort()
+
+            while db_found_vers:
+                db_ver = db_found_vers.pop()
+                db_incdir = db_ver_inc_map[db_ver]
+
+                # check lib directories parallel to the location of the header
+                db_dirs_to_check = [
+                    db_incdir.replace("include", 'lib64'),
+                    db_incdir.replace("include", 'lib'),
+                ]
+
+                else:
+                    # Same as other branch, but takes OSX SDK into account
+                    tmp = []
+                    for dn in db_dirs_to_check:
+                        if os.path.isdir(dn):
+                            tmp.append(dn)
+                    db_dirs_to_check = tmp
+
+                # Look for a version specific db-X.Y before an ambiguous dbX
+                # XXX should we -ever- look for a dbX name?  Do any
+                # systems really not name their library by version and
+                # symlink to more general names?
+                for dblib in (('db-%d.%d' % db_ver),
+                              ('db%d%d' % db_ver),
+                              ('db%d' % db_ver[0])):
+                    dblib_file = self.compiler.find_library_file(
+                                    db_dirs_to_check + lib_dirs, dblib )
+                    if dblib_file:
+                        dblib_dir = [ os.path.abspath(os.path.dirname(dblib_file)) ]
+                        raise db_found
+                    else:
+                        if db_setup_debug: print "db lib: ", dblib, "not found"
+
+        except db_found:
+            was_db_found = True
+            if db_setup_debug:
+                print "bsddb using BerkeleyDB lib:", db_ver, dblib
+                print "bsddb lib dir:", dblib_dir, " inc dir:", db_incdir
+            db_incs = [db_incdir]
             dblibs = [dblib]
-            # A default source build puts Berkeley DB in something like
-            # /usr/local/Berkeley.3.3 and the lib dir under that isn't
-            # normally on ld.so's search path, unless the sysadmin has hacked
-            # /etc/ld.so.conf.  We add the directory to runtime_library_dirs
-            # so the proper -R/--rpath flags get passed to the linker.  This
-            # is usually correct and most trouble free, but may cause problems
-            # in some unusual system configurations (e.g. the directory is on
-            # an NFS server that goes away).
+            # We add the runtime_library_dirs argument because the
+            # BerkeleyDB lib we're linking against often isn't in the
+            # system dynamic library search path.  This is usually
+            # correct and most trouble free, but may cause problems in
+            # some unusual system configurations (e.g. the directory
+            # is on an NFS server that goes away).
             exts.append(Extension('_bsddb', ['_bsddb.c'],
+                                  depends = ['bsddb.h'],
                                   library_dirs=dblib_dir,
                                   runtime_library_dirs=dblib_dir,
                                   include_dirs=db_incs,
                                   libraries=dblibs))
-        else:
+        if not was_db_found:
+            if db_setup_debug: print "db: no appropriate library found"
             db_incs = None
             dblibs = []
             dblib_dir = None
@@ -688,6 +814,11 @@ class PyBuildExt(build_ext):
             exts.append( Extension('_curses_panel', ['_curses_panel.c'],
                                    libraries = ['panel'] + curses_libs) )
 
+        # Build `fpectl` module if Python is configured with --with-fpectl
+        data = open('pyconfig.h').read()
+        m = re.search(r"#\s*define\s+WANT_SIGFPE_HANDLER\s+1\s*", data)
+        if m is not None:
+            exts.append(Extension('fpectl', ['fpectlmodule.c']))
 
         # Andrew Kuchling's zlib module.  Note that some versions of zlib
         # 1.1.3 have security problems.  See CERT Advisory CA-2002-07:
