@@ -572,9 +572,6 @@ class PyBuildExt(build_ext):
             db_inc_paths.append('/pkg/db-3.%d/include' % x)
             db_inc_paths.append('/opt/db-3.%d/include' % x)
 
-        if cross_compiling:
-            db_inc_paths = []
-
         # Add some common subdirectories for Sleepycat DB to the list,
         # based on the standard include directories. This way DB3/4 gets
         # picked up when it is installed in a non-standard prefix and
@@ -595,18 +592,13 @@ class PyBuildExt(build_ext):
 
         db_ver_inc_map = {}
 
-        if host_platform == 'darwin':
-            sysroot = macosx_sdk_root()
-
         class db_found(Exception): pass
+        was_db_found = False
         try:
             # See whether there is a Sleepycat header in the standard
             # search path.
             for d in inc_dirs + db_inc_paths:
                 f = os.path.join(d, "db.h")
-
-                if host_platform == 'darwin' and is_macosx_sdk_path(d):
-                    f = os.path.join(sysroot, d[1:], "db.h")
 
                 if db_setup_debug: print "db: looking for db.h in", f
                 if os.path.exists(f):
@@ -655,19 +647,12 @@ class PyBuildExt(build_ext):
                     db_incdir.replace("include", 'lib'),
                 ]
 
-                if host_platform != 'darwin':
-                    db_dirs_to_check = filter(os.path.isdir, db_dirs_to_check)
-
                 else:
                     # Same as other branch, but takes OSX SDK into account
                     tmp = []
                     for dn in db_dirs_to_check:
-                        if is_macosx_sdk_path(dn):
-                            if os.path.isdir(os.path.join(sysroot, dn[1:])):
-                                tmp.append(dn)
-                        else:
-                            if os.path.isdir(dn):
-                                tmp.append(dn)
+                        if os.path.isdir(dn):
+                            tmp.append(dn)
                     db_dirs_to_check = tmp
 
                 # Look for a version specific db-X.Y before an ambiguous dbX
@@ -686,6 +671,7 @@ class PyBuildExt(build_ext):
                         if db_setup_debug: print "db lib: ", dblib, "not found"
 
         except db_found:
+            was_db_found = True
             if db_setup_debug:
                 print "bsddb using BerkeleyDB lib:", db_ver, dblib
                 print "bsddb lib dir:", dblib_dir, " inc dir:", db_incdir
@@ -703,7 +689,7 @@ class PyBuildExt(build_ext):
                                   runtime_library_dirs=dblib_dir,
                                   include_dirs=db_incs,
                                   libraries=dblibs))
-        else:
+        if not was_db_found:
             if db_setup_debug: print "db: no appropriate library found"
             db_incs = None
             dblibs = []

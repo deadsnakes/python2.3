@@ -1,6 +1,6 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -1101,7 +1101,7 @@
+@@ -1087,7 +1087,7 @@
          # The versions with dots are used on Unix, and the versions without
          # dots on Windows, for detection by cygwin.
          tcllib = tklib = tcl_includes = tk_includes = None

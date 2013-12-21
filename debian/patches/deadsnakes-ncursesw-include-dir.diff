@@ -7,7 +7,7 @@
 
 --- a/setup.py
 +++ b/setup.py
-@@ -798,13 +798,19 @@
+@@ -784,13 +784,19 @@
                  exts.append( Extension('nis', ['nismodule.c'],
                                         libraries = libs) )
  
@@ -33,7 +33,7 @@
              curses_libs = ['ncurses']
              exts.append( Extension('_curses', ['_cursesmodule.c'],
                                     libraries = curses_libs) )
-@@ -824,9 +830,10 @@
+@@ -810,9 +816,10 @@
  
          # If the curses module is enabled, check for the panel module
          if (module_enabled(exts, '_curses') and

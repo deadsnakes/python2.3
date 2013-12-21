@@ -1,6 +1,6 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -691,16 +691,12 @@
+@@ -677,16 +677,12 @@
                  print "bsddb lib dir:", dblib_dir, " inc dir:", db_incdir
              db_incs = [db_incdir]
              dblibs = [dblib]
@@ -19,8 +19,8 @@
 +                                  #runtime_library_dirs=dblib_dir,
                                    include_dirs=db_incs,
                                    libraries=dblibs))
-         else:
-@@ -751,7 +747,7 @@
+         if not was_db_found:
+@@ -737,7 +733,7 @@
              elif db_incs is not None:
                  exts.append( Extension('dbm', ['dbmmodule.c'],
                                         library_dirs=dblib_dir,
