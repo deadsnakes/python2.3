@@ -4,3 +4,5 @@ distutils-link.diff
 distutils-sysconfig.diff
 tkinter-import.diff
 link-opt.diff
+egg-info-no-version.diff
+debug-build.diff

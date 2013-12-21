@@ -1034,11 +1034,6 @@ _PySys_Init(void)
 			     v = PyString_FromString(PyWin_DLLVersionString));
 	Py_XDECREF(v);
 #endif
-#ifdef Py_DEBUG
-	PyDict_SetItemString(sysdict, "pydebug", Py_True);
-#else
-	PyDict_SetItemString(sysdict, "pydebug", Py_False);
-#endif
 	if (warnoptions == NULL) {
 		warnoptions = PyList_New(0);
 	}

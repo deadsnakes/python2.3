@@ -606,12 +606,6 @@ else AC_MSG_RESULT(no); Py_DEBUG='false'
 fi],
 [AC_MSG_RESULT(no)])
 
-if test "$Py_DEBUG" = 'true'
-then
-	DEBUG_EXT=_d
-fi
-AC_SUBST(DEBUG_EXT)
-
 # XXX Shouldn't the code above that fiddles with BASECFLAGS and OPT be
 # merged with this chunk of code?
 
@@ -1239,7 +1233,7 @@ then
 	case $ac_sys_system in
 	hp*|HP*)   SO=.sl;;
 	CYGWIN*)   SO=.dll;;
-	*)	   SO=$DEBUG_EXT.so;;
+	*)	   SO=.so;;
 	esac
 else
 	# this might also be a termcap variable, see #610332

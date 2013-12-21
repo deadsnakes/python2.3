@@ -65,8 +65,7 @@ def get_python_inc(plat_specific=0, prefix=None):
                 if not os.path.exists(inc_dir):
                     inc_dir = os.path.join(os.path.dirname(base), "Include")
             return inc_dir
-        return os.path.join(prefix, "include",
-                            "python" + sys.version[:3] + (sys.pydebug and '_d' or ''))
+        return os.path.join(prefix, "include", "python" + sys.version[:3])
     elif os.name == "nt":
         return os.path.join(prefix, "include")
     elif os.name == "mac":
@@ -167,9 +166,9 @@ def customize_compiler(compiler):
             extra_cflags = os.environ['EXTRA_CFLAGS']
         if os.environ.has_key('OPT'):
             opt = os.environ['OPT']
-        cflags = ' '.join([str(x) for x in (basecflags, opt, extra_cflags) if x])
+        cflags = ' '.join(str(x) for x in (basecflags, opt, extra_cflags) if x)
         if os.environ.has_key('CFLAGS'):
-            cflags = ' '.join([str(x) for x in (basecflags, opt, os.environ['CFLAGS'], extra_cflags) if x])
+            cflags = ' '.join(str(x) for x in (basecflags, opt, os.environ['CFLAGS'], extra_cflags) if x)
         if os.environ.has_key('CPPFLAGS'):
             cpp = cpp + ' ' + os.environ['CPPFLAGS']
             opt = opt + ' ' + os.environ['CPPFLAGS']
@@ -206,7 +205,7 @@ def get_makefile_filename():
     if python_build:
         return os.path.join(os.path.dirname(sys.executable), "Makefile")
     lib_dir = get_python_lib(plat_specific=1, standard_lib=1)
-    return os.path.join(lib_dir, "config" + (sys.pydebug and "_d" or ""), "Makefile")
+    return os.path.join(lib_dir, "config", "Makefile")
 
 
 def parse_config_h(fp, g=None):
