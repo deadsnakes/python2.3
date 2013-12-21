@@ -55,3 +55,4 @@ deadsnakes-issue286334.diff
 deadsnakes-add-readme.valgrind.diff
 deadsnakes-force-info-docs.diff
 deadsnakes-bsddb-2.3-compatible.diff
+deadsnakes-readline-compile-fix.diff
