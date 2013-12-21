@@ -1318,7 +1318,7 @@ then
 			fi
 		fi
 		;;
-	Linux*|GNU*) LDSHARED='$(CC) -shared -Wl,-O1 -Wl,-Bsymbolic-functions';;
+	Linux*|GNU*) LDSHARED='$(CC) -shared';;
 	dgux*) LDSHARED="ld -G";;
 	BSD/OS*/4*) LDSHARED="gcc -shared";;
 	OpenBSD*|FreeBSD*)
@@ -1389,7 +1389,7 @@ then
 	    LINKFORSHARED="-Wl,-E -Wl,+s";;
 #	    LINKFORSHARED="-Wl,-E -Wl,+s -Wl,+b\$(BINLIBDEST)/lib-dynload";;
 	BSD/OS/4*) LINKFORSHARED="-Xlinker -export-dynamic";;
-	Linux*|GNU*) LINKFORSHARED="-Xlinker -export-dynamic -Wl,-O1 -Wl,-Bsymbolic-functions";;
+	Linux*|GNU*) LINKFORSHARED="-Xlinker -export-dynamic";;
 	# -u libsys_s pulls in all symbols in libsys
 	Darwin/*) 
 		# -u __dummy makes the linker aware of the objc runtime

@@ -1,15 +1,15 @@
 --- a/configure.in
 +++ b/configure.in
-@@ -1452,7 +1452,7 @@
+@@ -1318,7 +1318,7 @@
  			fi
  		fi
  		;;
 -	Linux*|GNU*) LDSHARED='$(CC) -shared';;
 +	Linux*|GNU*) LDSHARED='$(CC) -shared -Wl,-O1 -Wl,-Bsymbolic-functions';;
+ 	dgux*) LDSHARED="ld -G";;
  	BSD/OS*/4*) LDSHARED="gcc -shared";;
- 	FreeBSD*)
- 		if [[ "`$CC -dM -E - </dev/null | grep __ELF__`" != "" ]]
-@@ -1537,7 +1537,7 @@
+ 	OpenBSD*|FreeBSD*)
+@@ -1389,7 +1389,7 @@
  	    LINKFORSHARED="-Wl,-E -Wl,+s";;
  #	    LINKFORSHARED="-Wl,-E -Wl,+s -Wl,+b\$(BINLIBDEST)/lib-dynload";;
  	BSD/OS/4*) LINKFORSHARED="-Xlinker -export-dynamic";;
@@ -17,4 +17,4 @@
 +	Linux*|GNU*) LINKFORSHARED="-Xlinker -export-dynamic -Wl,-O1 -Wl,-Bsymbolic-functions";;
  	# -u libsys_s pulls in all symbols in libsys
  	Darwin/*) 
- 		# -u _PyMac_Error is needed to pull in the mac toolbox glue,
+ 		# -u __dummy makes the linker aware of the objc runtime
