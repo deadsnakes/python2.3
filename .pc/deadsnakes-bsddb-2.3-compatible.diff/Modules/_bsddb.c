@@ -601,7 +601,7 @@ PyObject *a, *b, *r;
       return NULL;
   }
 
-  r = Py_BuildValue("(OO)", a, b) ;
+  r = PyTuple_Pack(2, a, b) ;
   Py_DECREF(a);
   Py_DECREF(b);
   return r;
@@ -2090,12 +2090,12 @@ DB_pget(DBObject* self, PyObject* args, PyObject* kwargs)
                 keyObj = NUMBER_FromLong(*(int *)key.data);
             else
                 keyObj = Build_PyString(key.data, key.size);
-            retval = Py_BuildValue("(OOO)", keyObj, pkeyObj, dataObj);
+            retval = PyTuple_Pack(3, keyObj, pkeyObj, dataObj);
             Py_DECREF(keyObj);
         }
         else /* return just the pkey and data */
         {
-            retval = Py_BuildValue("(OO)", pkeyObj, dataObj);
+            retval = PyTuple_Pack(2, pkeyObj, dataObj);
         }
         Py_DECREF(dataObj);
         Py_DECREF(pkeyObj);
@@ -4389,13 +4389,13 @@ DBC_pget(DBCursorObject* self, PyObject* args, PyObject *kwargs)
                 keyObj = NUMBER_FromLong(*(int *)key.data);
             else
                 keyObj = Build_PyString(key.data, key.size);
-            retval = Py_BuildValue("(OOO)", keyObj, pkeyObj, dataObj);
+            retval = PyTuple_Pack(3, keyObj, pkeyObj, dataObj);
             Py_DECREF(keyObj);
             FREE_DBT(key);  /* 'make_key_dbt' could do a 'malloc' */
         }
         else /* return just the pkey and data */
         {
-            retval = Py_BuildValue("(OO)", pkeyObj, dataObj);
+            retval = PyTuple_Pack(2, pkeyObj, dataObj);
         }
         Py_DECREF(dataObj);
         Py_DECREF(pkeyObj);
@@ -5087,7 +5087,7 @@ DBEnv_memp_stat(DBEnvObject* self, PyObject* args, PyObject *kwargs)
 #undef MAKE_ENTRY
     free(fsp);
 
-    r = Py_BuildValue("(OO)", d, d2);
+    r = PyTuple_Pack(2, d, d2);
     Py_DECREF(d);
     Py_DECREF(d2);
     return r;
@@ -7347,7 +7347,7 @@ DBEnv_rep_process_message(DBEnvObject* self, PyObject* args)
             break;
     }
     RETURN_IF_ERR();
-    return Py_BuildValue("(OO)", Py_None, Py_None);
+    return PyTuple_Pack(2, Py_None, Py_None);
 }
 
 static int
@@ -10224,7 +10224,7 @@ PyMODINIT_FUNC  PyInit__bsddb(void)    /* Note the two underscores */
     {
         PyObject* bases;
 
-        bases = Py_BuildValue("(OO)", DBError, PyExc_KeyError);
+        bases = PyTuple_Pack(2, DBError, PyExc_KeyError);
 
 #define MAKE_EX2(name)   name = PyErr_NewException(PYBSDDB_EXCEPTION_BASE #name, bases, NULL); \
                          PyDict_SetItemString(d, #name, name)
