@@ -6,3 +6,4 @@ tkinter-import.diff
 link-opt.diff
 egg-info-no-version.diff
 debug-build.diff
+webbrowser.diff

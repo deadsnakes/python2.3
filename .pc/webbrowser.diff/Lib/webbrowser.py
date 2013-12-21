@@ -261,13 +261,10 @@ class WindowsDefault:
 # the TERM and DISPLAY cases, because we might be running Python from inside
 # an xterm.
 if os.environ.get("TERM") or os.environ.get("DISPLAY"):
-    _tryorder = ["www-browser", "links", "lynx", "w3m"]
+    _tryorder = ["links", "lynx", "w3m"]
 
     # Easy cases first -- register console browsers if we have them.
     if os.environ.get("TERM"):
-        # a generic browser command handled by alternatives
-        if _iscommand("www-browser"):
-            register("www-browser", None, GenericBrowser("www-browser '%s'"))
         # The Links browser <http://artax.karlin.mff.cuni.cz/~mikulas/links/>
         if _iscommand("links"):
             register("links", None, GenericBrowser("links '%s'"))
@@ -280,21 +277,14 @@ if os.environ.get("TERM") or os.environ.get("DISPLAY"):
 
     # X browsers have more in the way of options
     if os.environ.get("DISPLAY"):
-        _tryorder = ["x-www-browser", "galeon", "skipstone",
-                     "firefox", "iceweasel", "iceape",
-                     "mozilla-firefox", "mozilla-firebird", "mozilla", "netscape",
+        _tryorder = ["galeon", "skipstone", "mozilla", "netscape",
                      "kfm", "grail"] + _tryorder
 
-        # a generic browser command handled by alternatives
-        if _iscommand("x-www-browser"):
-            register("x-www-browser", None, GenericBrowser("x-www-browser '%s'"))
-
         # First, the Netscape series
-        for browser in ("firefox", "iceweasel", "iceape",
-                        "mozilla-firefox", "mozilla-firebird",
-                        "mozilla", "netscape"):
-            if _iscommand(browser):
-                register(browser, None, Netscape(browser))
+        if _iscommand("mozilla"):
+            register("mozilla", None, Netscape("mozilla"))
+        if _iscommand("netscape"):
+            register("netscape", None, Netscape("netscape"))
 
         # Next, Mosaic -- old but still in use.
         if _iscommand("mosaic"):

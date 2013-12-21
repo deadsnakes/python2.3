@@ -17,14 +17,14 @@
          # The Links browser <http://artax.karlin.mff.cuni.cz/~mikulas/links/>
          if _iscommand("links"):
              register("links", None, GenericBrowser("links '%s'"))
-@@ -277,12 +280,18 @@
+@@ -277,14 +280,21 @@
  
      # X browsers have more in the way of options
      if os.environ.get("DISPLAY"):
--        _tryorder = ["galeon", "skipstone",
+-        _tryorder = ["galeon", "skipstone", "mozilla", "netscape",
 +        _tryorder = ["x-www-browser", "galeon", "skipstone",
 +                     "firefox", "iceweasel", "iceape",
-                      "mozilla-firefox", "mozilla-firebird", "mozilla", "netscape",
++                     "mozilla-firefox", "mozilla-firebird", "mozilla", "netscape",
                       "kfm", "grail"] + _tryorder
  
 +        # a generic browser command handled by alternatives
@@ -32,9 +32,15 @@
 +            register("x-www-browser", None, GenericBrowser("x-www-browser '%s'"))
 +
          # First, the Netscape series
--        for browser in ("mozilla-firefox", "mozilla-firebird",
+-        if _iscommand("mozilla"):
+-            register("mozilla", None, Netscape("mozilla"))
+-        if _iscommand("netscape"):
+-            register("netscape", None, Netscape("netscape"))
 +        for browser in ("firefox", "iceweasel", "iceape",
 +                        "mozilla-firefox", "mozilla-firebird",
-                         "mozilla", "netscape"):
-             if _iscommand(browser):
-                 register(browser, None, Netscape(browser))
++                        "mozilla", "netscape"):
++            if _iscommand(browser):
++                register(browser, None, Netscape(browser))
+ 
+         # Next, Mosaic -- old but still in use.
+         if _iscommand("mosaic"):
