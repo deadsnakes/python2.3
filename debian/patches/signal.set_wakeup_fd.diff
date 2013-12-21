@@ -1,7 +1,7 @@
 # DP: Backport new function signal.set_wakeup_fd from the trunk
 --- a/Include/pyerrors.h
 +++ b/Include/pyerrors.h
-@@ -139,6 +139,9 @@
+@@ -138,6 +138,9 @@
  PyAPI_FUNC(int) PyErr_CheckSignals(void);
  PyAPI_FUNC(void) PyErr_SetInterrupt(void);
  
@@ -13,10 +13,11 @@
  PyAPI_FUNC(PyObject *) PyErr_ProgramText(const char *, int);
 --- a/Lib/test/test_signal.py
 +++ b/Lib/test/test_signal.py
-@@ -71,3 +71,60 @@
-     signal.signal(signal.SIGUSR1, usr1)
-     signal.signal(signal.SIGUSR2, usr2)
-     signal.signal(signal.SIGALRM, alrm)
+@@ -63,3 +63,61 @@
+ except KeyboardInterrupt:
+     if verbose:
+         print "KeyboardInterrupt (assume the alarm() went off)"
++
 +
 +class WakeupSignalTests(unittest.TestCase):
 +    TIMEOUT_FULL = 10
@@ -103,7 +104,7 @@
  #ifdef WITH_THREAD
  	}
  #endif
-@@ -264,6 +270,50 @@
+@@ -270,6 +276,50 @@
  anything else -- the callable Python object used as a handler");
  
  
@@ -154,7 +155,7 @@
  /* List of functions defined in the module */
  static PyMethodDef signal_methods[] = {
  #ifdef HAVE_ALARM
-@@ -271,11 +321,12 @@
+@@ -277,11 +327,12 @@
  #endif
  	{"signal",	        signal_signal, METH_VARARGS, signal_doc},
  	{"getsignal",	        signal_getsignal, METH_VARARGS, getsignal_doc},

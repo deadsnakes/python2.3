@@ -7,3 +7,5 @@ link-opt.diff
 egg-info-no-version.diff
 debug-build.diff
 webbrowser.diff
+issue961805.diff
+signal.set_wakeup_fd.diff
