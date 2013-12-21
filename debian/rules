@@ -708,7 +708,7 @@ endif
 		usr/include/python$(VER) \
 		usr/lib/libpython$(VER).so \
 		usr/lib/pkgconfig/python-$(VER).pc \
-		usr/lib/python$(VER)/distutils/command/wininst-*.exe
+		usr/lib/python$(VER)/distutils/command/wininst.exe
 
 	dh_link -p$(p_dev) usr/lib/python$(VER)/config/libpython$(VER).a \
 		usr/lib/libpython$(VER).a
