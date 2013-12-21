@@ -1,2 +1,4 @@
 deb-setup.diff
 deb-locations.diff
+distutils-link.diff
+distutils-sysconfig.diff

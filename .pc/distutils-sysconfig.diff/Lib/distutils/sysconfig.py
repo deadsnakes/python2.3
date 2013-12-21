@@ -146,9 +146,8 @@ def customize_compiler(compiler):
     varies across Unices and is stored in Python's Makefile.
     """
     if compiler.compiler_type == "unix":
-        (cc, cxx, opt, extra_cflags, basecflags, cflags, ccshared, ldshared, so_ext) = \
-            get_config_vars('CC', 'CXX', 'OPT', 'EXTRA_CFLAGS', 'BASECFLAGS', 'CFLAGS',
-                            'CCSHARED', 'LDSHARED', 'SO')
+        (cc, cxx, opt, basecflags, ccshared, ldshared, so_ext) = \
+            get_config_vars('CC', 'CXX', 'OPT', 'BASECFLAGS', 'CCSHARED', 'LDSHARED', 'SO')
 
         if os.environ.has_key('CC'):
             cc = os.environ['CC']
@@ -160,15 +159,11 @@ def customize_compiler(compiler):
             cpp = cc + " -E"           # not always
         if os.environ.has_key('LDFLAGS'):
             ldshared = ldshared + ' ' + os.environ['LDFLAGS']
-        if os.environ.has_key('BASECFLAGS'):
-            basecflags = os.environ['BASECFLAGS']
-        if os.environ.has_key('EXTRA_CFLAGS'):
-            extra_cflags = os.environ['EXTRA_CFLAGS']
-        if os.environ.has_key('OPT'):
-            opt = os.environ['OPT']
-        cflags = ' '.join([str(x) for x in (basecflags, opt, extra_cflags) if x])
+        if basecflags:
+        	opt = basecflags + ' ' + opt
         if os.environ.has_key('CFLAGS'):
-            cflags = ' '.join([str(x) for x in (basecflags, opt, os.environ['CFLAGS'], extra_cflags) if x])
+            opt = opt + ' ' + os.environ['CFLAGS']
+            ldshared = ldshared + ' ' + os.environ['CFLAGS']
         if os.environ.has_key('CPPFLAGS'):
             cpp = cpp + ' ' + os.environ['CPPFLAGS']
             opt = opt + ' ' + os.environ['CPPFLAGS']
