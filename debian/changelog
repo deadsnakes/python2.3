@@ -1,3 +1,9 @@
+python2.3 (2.3.7-1+raring1) raring; urgency=low
+
+  * Imported from Precise package.
+
+ -- Felix Krull <f_krull@gmx.de>  Mon, 23 Dec 2013 16:22:09 +0100
+
 python2.3 (2.3.7-1+precise1) precise; urgency=low
 
   * Initial deadsnakes release of Python 2.3.7.
