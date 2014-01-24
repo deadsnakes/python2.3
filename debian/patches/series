@@ -63,3 +63,4 @@ deadsnakes-force-info-docs.diff
 deadsnakes-bsddb-2.3-compatible.diff
 deadsnakes-readline-compile-fix.diff
 deadsnakes-curses-compile-fix.diff
+deadsnakes-platform-linux2.diff
