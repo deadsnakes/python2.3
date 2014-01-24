@@ -1,3 +1,9 @@
+python2.3 (2.3.7-2+trusty1) trusty; urgency=low
+
+  * Imported from Precise package.
+
+ -- Felix Krull <f_krull@gmx.de>  Fri, 24 Jan 2014 18:36:45 +0100
+
 python2.3 (2.3.7-2+precise1) precise; urgency=low
 
   * Fix doc build for trusty+.
