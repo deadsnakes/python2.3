@@ -1,3 +1,10 @@
+python2.3 (2.3.7-2+precise1) precise; urgency=low
+
+  * Fix doc build for trusty+.
+  * Have `sys.platform` be "linux2" even on Linux 3.*.
+
+ -- Felix Krull <f_krull@gmx.de>  Fri, 24 Jan 2014 16:16:38 +0100
+
 python2.3 (2.3.7-1+saucy1) saucy; urgency=low
 
   * Imported from Precise package.
