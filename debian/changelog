@@ -1,3 +1,9 @@
+python2.3 (2.3.7-2+quantal1) quantal; urgency=low
+
+  * Imported from Precise package.
+
+ -- Felix Krull <f_krull@gmx.de>  Fri, 24 Jan 2014 17:12:38 +0100
+
 python2.3 (2.3.7-2+precise1) precise; urgency=low
 
   * Fix doc build for trusty+.
