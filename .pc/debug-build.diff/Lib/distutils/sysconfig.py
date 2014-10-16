@@ -166,9 +166,9 @@ def customize_compiler(compiler):
             extra_cflags = os.environ['EXTRA_CFLAGS']
         if os.environ.has_key('OPT'):
             opt = os.environ['OPT']
-        cflags = ' '.join(str(x) for x in (basecflags, opt, extra_cflags) if x)
+        cflags = ' '.join([str(x) for x in (basecflags, opt, extra_cflags) if x])
         if os.environ.has_key('CFLAGS'):
-            cflags = ' '.join(str(x) for x in (basecflags, opt, os.environ['CFLAGS'], extra_cflags) if x)
+            cflags = ' '.join([str(x) for x in (basecflags, opt, os.environ['CFLAGS'], extra_cflags) if x])
         if os.environ.has_key('CPPFLAGS'):
             cpp = cpp + ' ' + os.environ['CPPFLAGS']
             opt = opt + ' ' + os.environ['CPPFLAGS']
