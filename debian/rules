@@ -688,7 +688,7 @@ endif
 			test -e $(scriptdir)/lib-dynload/$$i*.so \
 			  && echo $(scriptdir)/lib-dynload/$$i*.so; \
 		  done`
-	ls -l  $(d_min)/$(scriptdir)/lib-dynload/*.so
+	#ls -l  $(d_min)/$(scriptdir)/lib-dynload/*.so
 
 #		$(foreach i,$(MIN_EXTS),$(scriptdir)/lib-dynload/$(i).so) \
 
