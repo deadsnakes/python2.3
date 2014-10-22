@@ -59,3 +59,4 @@ deadsnakes-readline-compile-fix.diff
 deadsnakes-curses-compile-fix.diff
 deadsnakes-platform-linux2.diff
 readline-6.3-compat.diff
+deadsnakes-builtins.diff

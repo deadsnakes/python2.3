@@ -1,0 +1,14 @@
+--- a/Modules/Setup.dist
++++ b/Modules/Setup.dist
+@@ -171,6 +171,11 @@
+ #_weakref _weakref.c	# basic weak reference support
+ #_testcapi _testcapimodule.c    # Python C API test module
+ 
++
++#_random _randommodule.c	# random number generator implemented in C
++#itertools itertoolsmodule.c	# fast iterator tools implemented in C
++#strop stropmodule.c	# fast string operations implemented in C
++
+ #unicodedata unicodedata.c    # static Unicode character database
+ 
+ # access to ISO C locale support
