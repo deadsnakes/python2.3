@@ -63,7 +63,7 @@ STATIC_PYTHON=yes
 
 MIN_MODS := $(shell awk '/^  / && $$2 == "module" { print $$1 }' \
 		debian/PVER-minimal.README.Debian.in)
-MIN_EXTS := $(shell awk '/^  / && $$2 == "extension" { print $$1 }' \
+MIN_EXTS := $(shell awk '/^  / && $$2 ~ /^extension/ { print $$1 }' \
 		debian/PVER-minimal.README.Debian.in)
 MIN_BUILTINS := $(shell awk '/^  / && $$2 == "builtin" { print $$1 }' \
 		debian/PVER-minimal.README.Debian.in)
@@ -476,9 +476,8 @@ minimal-test:
 		mintest/lib/
 	cp -a $(foreach i,$(MIN_PACKAGES),Lib/$(i)) \
 		mintest/lib/
-	: # Don't install minimal extensions since those have been built statically.
-#	cp -p $(foreach i,$(MIN_EXTS),$(buildd_static)/build/lib*/$(i).so) \
-#		mintest/dynlib/
+	cp -p $(wildcard $(foreach i,$(MIN_EXTS),$(buildd_static)/build/lib*/$(i).*.so)) \
+		mintest/dynlib/
 	cp -p Lib/unittest.py mintest/lib/
 	cp -pr Lib/test mintest/lib/
 	cp -pr Lib mintest/all-lib
@@ -684,7 +683,12 @@ endif
 		$(scriptdir)/config/Makefile \
 		usr/include/$(PVER)/pyconfig.h \
 		$(scriptdir)/site.py \
-		$(scriptdir)/site-packages/pep-370-per-user-site-packages.pth
+		$(scriptdir)/site-packages/pep-370-per-user-site-packages.pth \
+		`cd $(d); for i in $(MIN_EXTS); do \
+			test -e $(scriptdir)/lib-dynload/$$i*.so \
+			  && echo $(scriptdir)/lib-dynload/$$i*.so; \
+		  done`
+	#ls -l  $(d_min)/$(scriptdir)/lib-dynload/*.so
 
 #		$(foreach i,$(MIN_EXTS),$(scriptdir)/lib-dynload/$(i).so) \
 
@@ -1009,8 +1013,8 @@ endif
 	  fi; \
 	done
 
-	dh_makeshlibs -p$(p_lib) -V '$(p_lib)'
-	dh_makeshlibs -p$(p_dbg) -V '$(p_dbg)'
+	dh_makeshlibs -p$(p_lib) -V '$(p_lib)' -- -c4
+	dh_makeshlibs -p$(p_dbg) -V '$(p_dbg)' -- -c4
 # don't include the following symbols, found in extensions
 # which either can be built as builtin or extension.
 	sed -ri '/^ (_check_|asdl_|fast_save_|init)/d' \
