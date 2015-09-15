@@ -1,3 +1,9 @@
+python2.3 (2.3.7-2+wily1) wily; urgency=medium
+
+  * Imported from Vivid package.
+
+ -- Felix Krull <f_krull@gmx.de>  Tue, 15 Sep 2015 14:39:28 +0200
+
 python2.3 (2.3.7-2+vivid1) vivid; urgency=medium
 
   * Imported from Utopic package.
