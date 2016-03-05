@@ -1,0 +1,36 @@
+python2.3 (2.3.7-2+xenial1) xenial; urgency=medium
+
+  * Imported from Wily package.
+
+ -- Felix Krull <f_krull@gmx.de>  Sat, 05 Mar 2016 22:03:37 +0100
+
+python2.3 (2.3.7-2+wily1) wily; urgency=medium
+
+  * Imported from Vivid package.
+
+ -- Felix Krull <f_krull@gmx.de>  Tue, 15 Sep 2015 14:39:28 +0200
+
+python2.3 (2.3.7-2+vivid1) vivid; urgency=medium
+
+  * Imported from Utopic package.
+
+ -- Felix Krull <f_krull@gmx.de>  Thu, 16 Apr 2015 15:52:15 +0200
+
+python2.3 (2.3.7-2+utopic1) utopic; urgency=medium
+
+  * Imported from Precise package.
+
+ -- Felix Krull <f_krull@gmx.de>  Fri, 10 Oct 2014 20:38:31 +0000
+
+python2.3 (2.3.7-2+precise1) precise; urgency=low
+
+  * Fix doc build for trusty+.
+  * Have `sys.platform` be "linux2" even on Linux 3.*.
+
+ -- Felix Krull <f_krull@gmx.de>  Fri, 24 Jan 2014 16:16:38 +0100
+
+python2.3 (2.3.7-1+precise1) precise; urgency=low
+
+  * Initial deadsnakes release of Python 2.3.7.
+
+ -- Felix Krull <f_krull@gmx.de>  Sat, 21 Dec 2013 22:19:29 +0100

@@ -1,0 +1,15 @@
+# DP: suggest installation of the pythonX.Y-dev package, if bdist_wininst
+# DP: cannot find the wininst-* files.
+
+--- a/Lib/distutils/command/bdist_wininst.py
++++ b/Lib/distutils/command/bdist_wininst.py
+@@ -238,5 +238,8 @@
+         # wininst.exe is in the same directory as this file
+         directory = os.path.dirname(__file__)
+         filename = os.path.join(directory, "wininst.exe")
+-        return open(filename, "rb").read()
++        try:
++            return open(filename, "rb").read()
++        except IOError, msg:
++            raise DistutilsFileError, str(msg) + ', please install the python%s-dev package' % sys.version[:3]
+ # class bdist_wininst
