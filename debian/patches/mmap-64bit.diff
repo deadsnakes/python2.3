@@ -1,8 +1,18 @@
-# DP: Patch #1365916: fix some unsafe 64-bit mmap methods, backport from 2.5
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:50 -0700
+Subject: mmap-64bit
 
+# DP: Patch #1365916: fix some unsafe 64-bit mmap methods, backport from 2.5
+---
+ Lib/test/test_mmap.py | 16 ++++++++++++++++
+ Modules/mmapmodule.c  | 24 ++++++++++++------------
+ 2 files changed, 28 insertions(+), 12 deletions(-)
+
+diff --git a/Lib/test/test_mmap.py b/Lib/test/test_mmap.py
+index a6796d5..d9f4cba 100644
 --- a/Lib/test/test_mmap.py
 +++ b/Lib/test/test_mmap.py
-@@ -312,6 +312,22 @@
+@@ -312,6 +312,22 @@ def test_both():
          os.unlink(TESTFN)
  
  
@@ -25,9 +35,11 @@
      print ' Test passed'
  
  test_both()
+diff --git a/Modules/mmapmodule.c b/Modules/mmapmodule.c
+index 4c28edb..2c37737 100644
 --- a/Modules/mmapmodule.c
 +++ b/Modules/mmapmodule.c
-@@ -375,7 +375,7 @@
+@@ -375,7 +375,7 @@ mmap_resize_method(mmap_object *self,
  {
  	unsigned long new_size;
  	CHECK_VALID(NULL);
@@ -36,7 +48,7 @@
  	    !is_resizeable(self)) {
  		return NULL;
  #ifdef MS_WINDOWS
-@@ -459,10 +459,10 @@
+@@ -459,10 +459,10 @@ mmap_tell_method(mmap_object *self, PyObject *args)
  static PyObject *
  mmap_flush_method(mmap_object *self, PyObject *args)
  {
@@ -50,7 +62,7 @@
  		return NULL;
  	} else if ((offset + size) > self->size) {
  		PyErr_SetString (PyExc_ValueError,
-@@ -535,7 +535,7 @@
+@@ -535,7 +535,7 @@ mmap_move_method(mmap_object *self, PyObject *args)
  {
  	unsigned long dest, src, count;
  	CHECK_VALID(NULL);
@@ -59,7 +71,7 @@
  	    !is_writeable(self)) {
  		return NULL;
  	} else {
-@@ -859,7 +859,7 @@
+@@ -859,7 +859,7 @@ new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
  	PyObject *map_size_obj = NULL;
  	int map_size;
  	int fd, flags = MAP_SHARED, prot = PROT_WRITE | PROT_READ;
@@ -68,7 +80,7 @@
  	char *keywords[] = {"fileno", "length", 
  			    "flags", "prot", 
  			    "access", NULL};
-@@ -871,11 +871,11 @@
+@@ -871,11 +871,11 @@ new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
  	if (map_size < 0)
  		return NULL;
  
@@ -82,7 +94,7 @@
  	case ACCESS_READ:
  		flags = MAP_SHARED;
  		prot = PROT_READ;
-@@ -922,7 +922,7 @@
+@@ -922,7 +922,7 @@ new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
  		PyErr_SetFromErrno(mmap_module_error);
  		return NULL;
  	}
@@ -91,7 +103,7 @@
  	return (PyObject *)m_obj;
  }
  #endif /* UNIX */
-@@ -938,7 +938,7 @@
+@@ -938,7 +938,7 @@ new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
  	DWORD dwErr = 0;
  	int fileno;
  	HANDLE fh = 0;
@@ -100,7 +112,7 @@
  	DWORD flProtect, dwDesiredAccess;
  	char *keywords[] = { "fileno", "length", 
  			     "tagname", 
-@@ -950,7 +950,7 @@
+@@ -950,7 +950,7 @@ new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
  		return NULL;
  	}
  
@@ -109,7 +121,7 @@
  	case ACCESS_READ:
  		flProtect = PAGE_READONLY;
  		dwDesiredAccess = FILE_MAP_READ;
-@@ -1035,7 +1035,7 @@
+@@ -1035,7 +1035,7 @@ new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
  	else
  		m_obj->tagname = NULL;
  

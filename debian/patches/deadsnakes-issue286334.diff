@@ -1,11 +1,20 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-issue286334
+
 # New-ish GCC versions in Ubuntu mistakenly detect buffer overflows in
 # Python 2.3; imported osdefs.h from 2.4 that doesn't have this issue. See
 # https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/286334
 # for a more in-depth description of this issue.
+---
+ Include/osdefs.h | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
+diff --git a/Include/osdefs.h b/Include/osdefs.h
+index 89e0ecb..6937659 100644
 --- a/Include/osdefs.h
 +++ b/Include/osdefs.h
-@@ -7,13 +7,6 @@
+@@ -7,13 +7,6 @@ extern "C" {
  
  /* Operating system dependencies */
  
@@ -19,7 +28,7 @@
  /* Mod by chrish: QNX has WATCOM, but isn't DOS */
  #if !defined(__QNX__)
  #if defined(MS_WINDOWS) || defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__DJGPP__) || defined(PYOS_OS2)
-@@ -44,8 +37,12 @@
+@@ -44,8 +37,12 @@ extern "C" {
  
  /* Max pathname length */
  #ifndef MAXPATHLEN

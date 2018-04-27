@@ -1,6 +1,16 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-curses-compile-fix
+
+---
+ Modules/_cursesmodule.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/Modules/_cursesmodule.c b/Modules/_cursesmodule.c
+index 563555c..c38244c 100644
 --- a/Modules/_cursesmodule.c
 +++ b/Modules/_cursesmodule.c
-@@ -112,11 +112,6 @@
+@@ -112,11 +112,6 @@ char *PyCursesVersion = "2.2";
  #define CURSES_MODULE
  #include "py_curses.h"
  

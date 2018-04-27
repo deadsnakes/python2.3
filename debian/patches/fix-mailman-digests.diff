@@ -1,8 +1,17 @@
-# DP: Fix email/Message.py set_charset() barfing on unicode
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:50 -0700
+Subject: fix-mailman-digests
 
+# DP: Fix email/Message.py set_charset() barfing on unicode
+---
+ Lib/email/Message.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Lib/email/Message.py b/Lib/email/Message.py
+index 1f23965..0df0457 100644
 --- a/Lib/email/Message.py
 +++ b/Lib/email/Message.py
-@@ -266,6 +266,8 @@
+@@ -266,6 +266,8 @@ class Message:
              return
          if isinstance(charset, StringType):
              charset = Charset.Charset(charset)

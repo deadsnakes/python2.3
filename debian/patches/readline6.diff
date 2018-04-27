@@ -1,20 +1,19 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:49 -0700
+Subject: readline6
+
 # DP: Fix issues with readline6
---- a/configure.in
-+++ b/configure.in
-@@ -2866,6 +2866,10 @@
-   [readline/readline.h],
-   AC_DEFINE(HAVE_RL_COMPLETION_APPEND_CHARACTER, 1,
-   [Define if you have readline 2.2]), )
-+  AC_EGREP_HEADER([extern int rl_completion_suppress_append;],
-+  [readline/readline.h],
-+  AC_DEFINE(HAVE_RL_COMPLETION_SUPPRESS_APPEND, 1,
-+  [Define if you have rl_completion_suppress_append]), )
- fi
- 
- # check for readline 4.0
+---
+ Modules/readline.c | 9 ++++++---
+ configure.in       | 4 ++++
+ pyconfig.h.in      | 3 +++
+ 3 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/Modules/readline.c b/Modules/readline.c
+index 1731d69..a1fef04 100644
 --- a/Modules/readline.c
 +++ b/Modules/readline.c
-@@ -576,6 +576,12 @@
+@@ -576,6 +576,12 @@ on_completion(char *text, int state)
  static char **
  flex_complete(char *text, int start, int end)
  {
@@ -27,7 +26,7 @@
  	Py_XDECREF(begidx);
  	Py_XDECREF(endidx);
  	begidx = PyInt_FromLong((long) start);
-@@ -618,9 +624,6 @@
+@@ -618,9 +624,6 @@ setup_readline(void)
  	rl_completer_word_break_characters =
  		strdup(" \t\n`~!@#$%^&*()-=+[{]}\\|;:'\",<>/?");
  		/* All nonalphanums except '.' */
@@ -37,6 +36,23 @@
  
  	begidx = PyInt_FromLong(0L);
  	endidx = PyInt_FromLong(0L);
+diff --git a/configure.in b/configure.in
+index f1b10c8..22fb43a 100644
+--- a/configure.in
++++ b/configure.in
+@@ -2866,6 +2866,10 @@ then
+   [readline/readline.h],
+   AC_DEFINE(HAVE_RL_COMPLETION_APPEND_CHARACTER, 1,
+   [Define if you have readline 2.2]), )
++  AC_EGREP_HEADER([extern int rl_completion_suppress_append;],
++  [readline/readline.h],
++  AC_DEFINE(HAVE_RL_COMPLETION_SUPPRESS_APPEND, 1,
++  [Define if you have rl_completion_suppress_append]), )
+ fi
+ 
+ # check for readline 4.0
+diff --git a/pyconfig.h.in b/pyconfig.h.in
+index a4939c7..4b5d10a 100644
 --- a/pyconfig.h.in
 +++ b/pyconfig.h.in
 @@ -369,6 +369,9 @@

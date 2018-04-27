@@ -1,13 +1,68 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:51 -0700
+Subject: deadsnakes-ncursesw-include-dir
+
 # Add /usr/include/ncursesw for the _curses and _cursespanel modules. Prior to
 # precise, libreadline-dev would pull in libncurses5-dev which provides
 # /usr/include/curses.h; but that's kinda wrong and doesn't work in precise
 # anymore (at least on amd64), so we just use the correct include path right
 # away. See also:
 # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=650600
+---
+ configure.in | 20 ++++++++++++--------
+ setup.py     | 23 +++++++++++++++--------
+ 2 files changed, 27 insertions(+), 16 deletions(-)
 
+diff --git a/configure.in b/configure.in
+index 707205e..f6effef 100644
+--- a/configure.in
++++ b/configure.in
+@@ -952,7 +952,7 @@ dnl AC_MSG_RESULT($cpp_type)
+ 
+ # checks for header files
+ AC_HEADER_STDC
+-AC_CHECK_HEADERS(curses.h dlfcn.h fcntl.h grp.h limits.h langinfo.h \
++AC_CHECK_HEADERS(dlfcn.h fcntl.h grp.h limits.h langinfo.h \
+ libintl.h locale.h ncurses.h poll.h pthread.h \
+ signal.h stdarg.h stddef.h stdlib.h stropts.h termios.h thread.h \
+ unistd.h utime.h \
+@@ -963,13 +963,6 @@ sys/resource.h netpacket/packet.h sysexits.h)
+ AC_HEADER_DIRENT
+ AC_HEADER_MAJOR
+ 
+-# On Solaris, term.h requires curses.h
+-AC_CHECK_HEADER(term.h,,,[
+-#ifdef HAVE_CURSES_H
+-#include <curses.h>
+-#endif
+-])
+-
+ # checks for typedefs
+ was_it_defined=no
+ AC_MSG_CHECKING(for clock_t in time.h)
+@@ -3013,6 +3006,17 @@ then
+   [Define if you have struct stat.st_mtim.tv_nsec])
+ fi
+ 
++ac_save_cppflags="$CPPFLAGS"
++CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
++AC_CHECK_HEADERS(curses.h ncurses.h)
++
++# On Solaris, term.h requires curses.h
++AC_CHECK_HEADERS(term.h,,,[
++#ifdef HAVE_CURSES_H
++#include <curses.h>
++#endif
++])
++
+ # On HP/UX 11.0, mvwdelch is a block with a return statement
+ AC_MSG_CHECKING(whether mvwdelch is an expression)
+ AC_CACHE_VAL(ac_cv_mvwdelch_is_expression,
+diff --git a/setup.py b/setup.py
+index e4af704..7cfa65b 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -781,13 +781,19 @@
+@@ -781,13 +781,19 @@ class PyBuildExt(build_ext):
                  exts.append( Extension('nis', ['nismodule.c'],
                                         libraries = libs) )
  
@@ -33,7 +88,7 @@
              curses_libs = ['ncurses']
              exts.append( Extension('_curses', ['_cursesmodule.c'],
                                     libraries = curses_libs) )
-@@ -807,9 +813,10 @@
+@@ -807,9 +813,10 @@ class PyBuildExt(build_ext):
  
          # If the curses module is enabled, check for the panel module
          if (module_enabled(exts, '_curses') and
@@ -46,46 +101,3 @@
  
          # Build `fpectl` module if Python is configured with --with-fpectl
          data = open('pyconfig.h').read()
---- a/configure.in
-+++ b/configure.in
-@@ -952,7 +952,7 @@
- 
- # checks for header files
- AC_HEADER_STDC
--AC_CHECK_HEADERS(curses.h dlfcn.h fcntl.h grp.h limits.h langinfo.h \
-+AC_CHECK_HEADERS(dlfcn.h fcntl.h grp.h limits.h langinfo.h \
- libintl.h locale.h ncurses.h poll.h pthread.h \
- signal.h stdarg.h stddef.h stdlib.h stropts.h termios.h thread.h \
- unistd.h utime.h \
-@@ -963,13 +963,6 @@
- AC_HEADER_DIRENT
- AC_HEADER_MAJOR
- 
--# On Solaris, term.h requires curses.h
--AC_CHECK_HEADER(term.h,,,[
--#ifdef HAVE_CURSES_H
--#include <curses.h>
--#endif
--])
--
- # checks for typedefs
- was_it_defined=no
- AC_MSG_CHECKING(for clock_t in time.h)
-@@ -3013,6 +3006,17 @@
-   [Define if you have struct stat.st_mtim.tv_nsec])
- fi
- 
-+ac_save_cppflags="$CPPFLAGS"
-+CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
-+AC_CHECK_HEADERS(curses.h ncurses.h)
-+
-+# On Solaris, term.h requires curses.h
-+AC_CHECK_HEADERS(term.h,,,[
-+#ifdef HAVE_CURSES_H
-+#include <curses.h>
-+#endif
-+])
-+
- # On HP/UX 11.0, mvwdelch is a block with a return statement
- AC_MSG_CHECKING(whether mvwdelch is an expression)
- AC_CACHE_VAL(ac_cv_mvwdelch_is_expression,

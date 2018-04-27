@@ -1,6 +1,39 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:51 -0700
+Subject: deadsnakes-fix-debug-ext
+
+---
+ Makefile.pre.in |  4 ++--
+ configure.in    | 32 +++++++++++++++++---------------
+ 2 files changed, 19 insertions(+), 17 deletions(-)
+
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index 6a54932..de0275f 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -348,7 +348,7 @@ $(LIBRARY): $(LIBRARY_OBJS)
+ 	$(AR) cr $@ $(MODOBJS)
+ 	$(RANLIB) $@
+ 
+-libpython$(VERSION).so: $(LIBRARY_OBJS)
++libpython$(VERSION)$(DEBUG_EXT).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+ 		$(LDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
+ 		$(LN) -f $(INSTSONAME) $@; \
+@@ -356,7 +356,7 @@ libpython$(VERSION).so: $(LIBRARY_OBJS)
+ 		$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
+ 	fi
+ 
+-libpython$(VERSION).sl: $(LIBRARY_OBJS)
++libpython$(VERSION)$(DEBUG_EXT).sl: $(LIBRARY_OBJS)
+ 	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(LIBC) $(LIBM)
+ 
+ # This rule is here for OPENSTEP/Rhapsody/MacOSX. It builds a temporary
+diff --git a/configure.in b/configure.in
+index f6effef..f4d9d7f 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -424,7 +424,7 @@
+@@ -424,7 +424,7 @@ AC_SUBST(LIBRARY)
  AC_MSG_CHECKING(LIBRARY)
  if test -z "$LIBRARY"
  then
@@ -9,7 +42,7 @@
  fi
  AC_MSG_RESULT($LIBRARY)
  
-@@ -532,44 +532,44 @@
+@@ -532,44 +532,44 @@ if test $enable_shared = "yes"; then
    AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
    case $ac_sys_system in
      BeOS*)
@@ -68,7 +101,7 @@
          BASECFLAGS="$BASECFLAGS -pic"
          ;;
    esac
-@@ -620,6 +620,8 @@
+@@ -620,6 +620,8 @@ fi],
  if test "$Py_DEBUG" = 'true'
  then
  	DEBUG_EXT=_d
@@ -77,23 +110,3 @@
  fi
  AC_SUBST(DEBUG_EXT)
  
---- a/Makefile.pre.in
-+++ b/Makefile.pre.in
-@@ -348,7 +348,7 @@
- 	$(AR) cr $@ $(MODOBJS)
- 	$(RANLIB) $@
- 
--libpython$(VERSION).so: $(LIBRARY_OBJS)
-+libpython$(VERSION)$(DEBUG_EXT).so: $(LIBRARY_OBJS)
- 	if test $(INSTSONAME) != $(LDLIBRARY); then \
- 		$(LDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
- 		$(LN) -f $(INSTSONAME) $@; \
-@@ -356,7 +356,7 @@
- 		$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
- 	fi
- 
--libpython$(VERSION).sl: $(LIBRARY_OBJS)
-+libpython$(VERSION)$(DEBUG_EXT).sl: $(LIBRARY_OBJS)
- 	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(LIBC) $(LIBM)
- 
- # This rule is here for OPENSTEP/Rhapsody/MacOSX. It builds a temporary

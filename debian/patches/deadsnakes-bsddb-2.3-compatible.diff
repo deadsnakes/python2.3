@@ -1,6 +1,16 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-bsddb-2.3-compatible
+
+---
+ Modules/_bsddb.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/Modules/_bsddb.c b/Modules/_bsddb.c
+index dad1dcd..ab7a44f 100644
 --- a/Modules/_bsddb.c
 +++ b/Modules/_bsddb.c
-@@ -601,7 +601,7 @@
+@@ -601,7 +601,7 @@ PyObject *a, *b, *r;
        return NULL;
    }
  
@@ -9,7 +19,7 @@
    Py_DECREF(a);
    Py_DECREF(b);
    return r;
-@@ -2090,12 +2090,12 @@
+@@ -2090,12 +2090,12 @@ DB_pget(DBObject* self, PyObject* args, PyObject* kwargs)
                  keyObj = NUMBER_FromLong(*(int *)key.data);
              else
                  keyObj = Build_PyString(key.data, key.size);
@@ -24,7 +34,7 @@
          }
          Py_DECREF(dataObj);
          Py_DECREF(pkeyObj);
-@@ -4389,13 +4389,13 @@
+@@ -4389,13 +4389,13 @@ DBC_pget(DBCursorObject* self, PyObject* args, PyObject *kwargs)
                  keyObj = NUMBER_FromLong(*(int *)key.data);
              else
                  keyObj = Build_PyString(key.data, key.size);
@@ -40,7 +50,7 @@
          }
          Py_DECREF(dataObj);
          Py_DECREF(pkeyObj);
-@@ -5087,7 +5087,7 @@
+@@ -5087,7 +5087,7 @@ DBEnv_memp_stat(DBEnvObject* self, PyObject* args, PyObject *kwargs)
  #undef MAKE_ENTRY
      free(fsp);
  
@@ -49,7 +59,7 @@
      Py_DECREF(d);
      Py_DECREF(d2);
      return r;
-@@ -7347,7 +7347,7 @@
+@@ -7347,7 +7347,7 @@ DBEnv_rep_process_message(DBEnvObject* self, PyObject* args)
              break;
      }
      RETURN_IF_ERR();
@@ -58,7 +68,7 @@
  }
  
  static int
-@@ -10224,7 +10224,7 @@
+@@ -10224,7 +10224,7 @@ PyMODINIT_FUNC  PyInit__bsddb(void)    /* Note the two underscores */
      {
          PyObject* bases;
  

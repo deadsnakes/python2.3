@@ -1,8 +1,17 @@
-# DP: determine the platform from /etc/lsb-release
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:50 -0700
+Subject: lsb-platform
 
+# DP: determine the platform from /etc/lsb-release
+---
+ Lib/platform.py | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/Lib/platform.py b/Lib/platform.py
+index d984402..b8c8470 100755
 --- a/Lib/platform.py
 +++ b/Lib/platform.py
-@@ -235,6 +235,25 @@
+@@ -235,6 +235,25 @@ def dist(distname='',version='',id='',
      except os.error:
          # Probably not a Unix system
          return distname,version,id

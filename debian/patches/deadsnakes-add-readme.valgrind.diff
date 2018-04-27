@@ -1,6 +1,17 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-add-readme.valgrind
+
 # Include README.valgrind from Python 2.4 - it's applicable for 2.3 and
 # debian/rules references it.
+---
+ Misc/README.valgrind | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 Misc/README.valgrind
 
+diff --git a/Misc/README.valgrind b/Misc/README.valgrind
+new file mode 100644
+index 0000000..8e480e9
 --- /dev/null
 +++ b/Misc/README.valgrind
 @@ -0,0 +1,77 @@

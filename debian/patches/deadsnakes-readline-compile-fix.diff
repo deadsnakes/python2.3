@@ -1,6 +1,16 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-readline-compile-fix
+
+---
+ Modules/readline.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Modules/readline.c b/Modules/readline.c
+index a1fef04..478148c 100644
 --- a/Modules/readline.c
 +++ b/Modules/readline.c
-@@ -93,7 +93,7 @@
+@@ -93,7 +93,7 @@ read_history_file(PyObject *self, PyObject *args)
  	return Py_None;
  }
  
@@ -9,7 +19,7 @@
  PyDoc_STRVAR(doc_read_history_file,
  "read_history_file([filename]) -> None\n\
  Load a readline history file.\n\
-@@ -109,8 +109,8 @@
+@@ -109,8 +109,8 @@ write_history_file(PyObject *self, PyObject *args)
  	if (!PyArg_ParseTuple(args, "|z:write_history_file", &s))
  		return NULL;
  	errno = write_history(s);
@@ -20,7 +30,7 @@
  	if (errno)
  		return PyErr_SetFromErrno(PyExc_IOError);
  	Py_INCREF(Py_None);
-@@ -128,10 +128,10 @@
+@@ -128,10 +128,10 @@ The default filename is ~/.history.");
  static PyObject*
  set_history_length(PyObject *self, PyObject *args)
  {
@@ -33,7 +43,7 @@
  	Py_INCREF(Py_None);
  	return Py_None;
  }
-@@ -148,7 +148,7 @@
+@@ -148,7 +148,7 @@ history truncation.");
  static PyObject*
  get_history_length(PyObject *self, PyObject *noarg)
  {

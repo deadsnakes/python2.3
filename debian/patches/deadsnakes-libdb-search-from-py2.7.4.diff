@@ -1,6 +1,16 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:51 -0700
+Subject: deadsnakes-libdb-search-from-py2.7.4
+
+---
+ setup.py | 261 +++++++++++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 178 insertions(+), 83 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 35ec8e9..e4af704 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -496,103 +496,198 @@
+@@ -496,103 +496,198 @@ class PyBuildExt(build_ext):
          # implementation independent wrapper for these; dumbdbm.py provides
          # similar functionality (but slower of course) implemented in Python.
  
@@ -60,6 +70,8 @@
 -        db_search_order = db_try_this.keys()
 -        db_search_order.sort()
 -        db_search_order.reverse()
+-
+-        class found(Exception): pass
 +        # This requires the Sleepycat^WOracle DB code. The supported versions
 +        # are set below.  Visit the URL above to download
 +        # a release.  Most open source OSes come with one or more
@@ -150,8 +162,7 @@
 +
 +        db_inc_paths = std_variants + db_inc_paths
 +        db_inc_paths = [p for p in db_inc_paths if os.path.exists(p)]
- 
--        class found(Exception): pass
++
 +        db_ver_inc_map = {}
 +
 +        class db_found(Exception): pass

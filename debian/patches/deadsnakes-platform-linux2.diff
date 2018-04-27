@@ -1,6 +1,16 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-platform-linux2
+
+---
+ configure.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.in b/configure.in
+index b2086dd..abe906a 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -129,6 +129,7 @@
+@@ -129,6 +129,7 @@ then
  	    sparc*) MACHDEP="$MACHDEP-sparc" ;;
  	    esac
  	    ;;

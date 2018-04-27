@@ -1,6 +1,16 @@
+From: Felix Krull <f_krull@gmx.de>
+Date: Fri, 27 Apr 2018 07:43:52 -0700
+Subject: deadsnakes-builtins
+
+---
+ Modules/Setup.dist | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Modules/Setup.dist b/Modules/Setup.dist
+index 3ca6dab..b960780 100644
 --- a/Modules/Setup.dist
 +++ b/Modules/Setup.dist
-@@ -171,6 +171,11 @@
+@@ -171,6 +171,11 @@ GLHACK=-Dclear=__GLclear
  #_weakref _weakref.c	# basic weak reference support
  #_testcapi _testcapimodule.c    # Python C API test module
  
