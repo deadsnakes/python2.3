@@ -60,3 +60,4 @@ deadsnakes-curses-compile-fix.diff
 deadsnakes-platform-linux2.diff
 readline-6.3-compat.diff
 deadsnakes-builtins.diff
+0063-Fix-perl-imports-from-.-for-perl-5.26.patch
